@@ -4,7 +4,7 @@ import clsx from 'clsx';
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
-  variant?: 'primary';
+  variant?: 'primary' | 'black';
   style?: 'solid' | 'outline' | 'white';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   isLoading?: boolean;
@@ -32,14 +32,17 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const btnStyleSolidClasses = {
     primary: 'text-white bg-[#56B1F0]',
+    black: 'text-white bg-black',
   };
 
   const btnStyleOutlineClasses = {
     primary: 'text-[#56B1F0] bg-white border border-[#56B1F0] hover:bg-[#56B1F0] hover:text-white',
+    black: '',
   };
 
   const btnStyleWhiteClasses = {
     primary: 'text-gray-800 bg-white border border-gray-200 shadow-sm hover:bg-gray-50',
+    black: '',
   };
 
   const buttonClasses = {

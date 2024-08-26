@@ -3,6 +3,10 @@ import useFileStore from '@/store/fileStore';
 import { Header } from '@/components/Layout/Header';
 import LandingImage from '/images/Young man coding on laptop.png';
 
+/**
+ * Renders the "Landing" section of the application.
+ * Acts as the default landing page, allowing users to upload code folders.
+ */
 const Landing: React.FC = () => {
   const { setIsFileUploaded } = useFileStore();
 

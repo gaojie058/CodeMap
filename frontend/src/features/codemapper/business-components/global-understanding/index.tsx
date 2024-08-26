@@ -5,32 +5,21 @@ import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
 // TODO: add data from `GptComponent`
 const understandings = [
   {
-    name: 'Overview',
-    api: '',
+    name: 'Project Structure',
   },
   {
-    name: 'Inheritance Relationship',
-    api: '',
+    name: 'Distribution of Modules in the Project Structure',
   },
   {
-    name: 'Parent Class',
-    api: '',
-  },
-  {
-    name: 'Child Class',
-    api: '',
-  },
-  {
-    name: 'Significance of Relationship',
-    api: '',
+    name: 'Distribution of Files in the Project Structure',
   },
 ];
 
 /**
- * Renders `Global Understanding` section of `Function Call` page.
+ * Renders `Global Understanding` section of `Business Components` page.
  * This component is used within the `Toolbar` to display a list of items with collapsible details.
  */
-const FnGlobalUnderstanding: React.FC = () => {
+const BizGlobalUnderstanding: React.FC = () => {
   return (
     <>
       <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
@@ -42,4 +31,4 @@ const FnGlobalUnderstanding: React.FC = () => {
   );
 };
 
-export default FnGlobalUnderstanding;
+export default BizGlobalUnderstanding;

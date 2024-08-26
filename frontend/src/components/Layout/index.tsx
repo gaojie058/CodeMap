@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
 import React from 'react';
-import { Header } from './Header';
 import Sidebar from './Sidebar';
+import { Header } from './Header';
+import styled from '@emotion/styled';
 
 const LayoutContainer = styled.div`
   display: flex;
@@ -19,12 +19,12 @@ const MainContainer = styled.div`
   container-name: multi-select-container;
   container-type: inline-size;
   overflow-x: hidden;
-  overflow-y: auto;
-  overflow: hidden auto;
+  overflow-y: hidden;
 `;
 
 const ContentContainer = styled.div`
   padding: 1rem 2rem;
+  overflow: hidden;
 `;
 
 interface LayoutProps {

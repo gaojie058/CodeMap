@@ -5,6 +5,8 @@ import CodeMapper from '@/features/codemapper';
 import NotFound from '@/features/misc/error/NotFound';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import FunctionCall from '@/features/codemapper/function-call';
+import CodeViewer from '@/features/codeviewer';
+import BusinessComponents from '@/features/codemapper/business-components';
 
 export const AppRouter = () => {
   const { isFileUploaded } = useFileStore();
@@ -46,7 +48,7 @@ export const AppRouter = () => {
            * Code Viewer Route
            * Renders `CodeViewer` page as the landing page after successful code upload.
            */}
-          <Route index element={<>Code Browser</>} />
+          <Route index element={<CodeViewer />} />
 
           {/**
            * Defines routes for the /understand path
@@ -54,7 +56,7 @@ export const AppRouter = () => {
            */}
           <Route path='/understand'>
             <Route index element={<CodeMapper />} />
-            <Route path='business-comps' element={<>Biz Comps</>} />
+            <Route path='business-comps' element={<BusinessComponents />} />
             <Route path='function-call' element={<FunctionCall />} />
           </Route>
         </Route>
