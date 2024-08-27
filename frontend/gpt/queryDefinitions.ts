@@ -66,6 +66,21 @@ export const queryDefinitions = {
     contentTemplate: 'Generate a function call flow diagram for the file or component: {fileOrComponent}',
     description: 'Generates a DOT language representation of the function call flow for a specific file or component'
   },
+  businessLocalGraph: {
+    promptName: 'businessLocalGraph' as PromptName,
+    contentTemplate: 'Generate a business component flow diagram for the selected node: {selectedNode}',
+    description: 'Generates a DOT language representation of the business component flow for a specific file or component'
+  },
+  functionCallLocalDesc: {
+    promptName: 'functionCallLocalDesc' as PromptName,
+    contentTemplate: 'Generate a function call flow for the selected node: {selectedNode}',
+    description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
+  },
+  functionCallLocalExplain: {
+    promptName: 'functionCallLocalExplain' as PromptName,
+    contentTemplate: 'Generate a function call flow for the selected node: {selectedNode}',
+    description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
+  }
   // 可以继续添加更多的查询定义...
 };
 

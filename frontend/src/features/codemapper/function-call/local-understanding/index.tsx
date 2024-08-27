@@ -1,12 +1,10 @@
-import React from 'react';
-import {
-  ArrowsPointingOutIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline';
-import { useState } from 'react';
-import { AnalysisGraph } from '../../graph';
-import Button from '@/components/Elements/Button/Button';
-import IconButton from '@/components/Elements/Button/IconButton';
+import React, { useEffect, useState } from 'react';
+import useStore from '@/store/store';
+import { GptComponent } from '@gpt/GptComponent';
+import useToolbarStore from '@/store/toolbarStore';
+import { extractDotContent } from '@/utils/extractdot';
+import { AnalysisGraph, LocalGraph } from '../../graph';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { BaseDialog } from '@/components/Elements/Dialog/BaseDialog';
 import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
 
@@ -40,7 +38,6 @@ const relevantInheritance = [
  */
 const FnLocalUnderstanding: React.FC = () => {
   // dummy graph setup
-  const [hasDot, setHasDot] = useState<boolean>(false);
   const [isMiniGraphOpen, setIsMiniGraphOpen] = useState<boolean>(false);
 
   //dummy disclosure setup
@@ -48,37 +45,42 @@ const FnLocalUnderstanding: React.FC = () => {
     useState<boolean>(false);
   const [isRelevantExpOpen, setIsRelevantExpOpen] = useState<boolean>(false);
 
+  const { selectedNode } = useToolbarStore();
+
+  const [gptResFnCallLocalGraph, setGptResFnCallLocalGraph] = useState<
+    string | null
+  >(null);
+  const [gptResHighlightedFnCallFlow, setGptResHighlightedFnCallFlow] =
+    useState<string | null>(null);
+  const [gptResRelevantFnCallFlow, setGptResRelevantFnCallFlow] = useState<
+    string | null
+  >(null);
+
+  const handleResFnCallLocalGraph = (res: string | null) =>
+    setGptResFnCallLocalGraph(res);
+  const handleResHighlightedFnCallFlow = (res: string | null) =>
+    setGptResHighlightedFnCallFlow(res);
+  const handleResRelevantFnCallFlow = (res: string | null) =>
+    setGptResRelevantFnCallFlow(res);
+
+  const { fnCallLocalDOT, setFnCallLocalDOT } = useStore();
+
+  useEffect(() => {
+    if (gptResFnCallLocalGraph) {
+      setFnCallLocalDOT(extractDotContent(gptResFnCallLocalGraph));
+      console.log(extractDotContent(gptResFnCallLocalGraph));
+    }
+
+  }, [gptResFnCallLocalGraph]);
+
   return (
     <>
       <div className='mx-auto w-full max-w-lg flex flex-col gap-4 rounded-xl'>
-        
-        {/* 
-            `Mini Graph` container
-            TODO: Separate Component, add data from `GptComponent`
-        */}
-        <div className='w-full h-64 border border-gray-200 rounded-lg relative flex items-center justify-center'>
-          {hasDot ? (
-            <>
-              <AnalysisGraph dotData='digraph {a -> b}' />
-              <IconButton
-                icon={<ArrowsPointingOutIcon />}
-                onClick={() => setIsMiniGraphOpen(true)}
-                className='absolute top-0 right-0 mt-2 mr-2'
-              />
-            </>
-          ) : (
-            <span className='text-xs font-medium text-zinc-500'>
-              Select a node to check its detailed map.
-            </span>
-          )}
-          <Button
-            variant='black'
-            className='absolute bottom-0 right-0 mb-2 mr-2'
-            onClick={() => setHasDot(!hasDot)}
-          >
-            Regenerate
-          </Button>
-        </div>
+        <LocalGraph
+          dot={fnCallLocalDOT}
+          onExpand={() => setIsMiniGraphOpen(true)}
+          onRegenerate={() => {}}
+        />
 
         {/* 
             Collapsible Buttons in `Local Understanding` 
@@ -130,6 +132,30 @@ const FnLocalUnderstanding: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {selectedNode && !fnCallLocalDOT && (
+          <GptComponent
+            queryType='functionCallFlow'
+            params={{ selectedNode }}
+            onResponseReceived={handleResFnCallLocalGraph}
+          />
+        )}
+
+        {/* {selectedNode && (
+          <GptComponent
+            queryType='functionCallLocalDesc'
+            params={{ selectedNode }}
+            onResponseReceived={handleResHighlightedFnCallFlow}
+          />
+        )}
+
+        {selectedNode && (
+          <GptComponent
+            queryType='functionCallLocalExplain'
+            params={{ selectedNode }}
+            onResponseReceived={handleResRelevantFnCallFlow}
+          />
+        )} */}
       </div>
 
       {/* Dialog that displays expanded `Mini Graph` in Local Understanding  */}
@@ -137,7 +163,7 @@ const FnLocalUnderstanding: React.FC = () => {
         isOpen={isMiniGraphOpen}
         onClose={() => setIsMiniGraphOpen(!isMiniGraphOpen)}
       >
-        <AnalysisGraph dotData='digraph {a -> b}' />
+        <AnalysisGraph dotData={fnCallLocalDOT} />
       </BaseDialog>
     </>
   );

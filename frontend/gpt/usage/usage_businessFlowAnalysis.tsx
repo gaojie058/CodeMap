@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GptComponent } from '../GptComponent';
 
-const App: React.FC = () => {
+const BusinessFlowAnalysis: React.FC = () => {
   const [highlightedBusinessFlow, setHighlightedBusinessFlow] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -28,4 +28,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default BusinessFlowAnalysis;

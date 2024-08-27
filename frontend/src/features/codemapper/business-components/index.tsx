@@ -1,34 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Toolbar from '../toolbar';
+import useStore from '@/store/store';
 import { AnalysisGraph } from '../graph';
-import { dotData } from '@/data/dotData';
+import { GptComponent } from '@gpt/GptComponent';
 import useToolbarStore from '@/store/toolbarStore';
+import { extractDotContent } from '@/utils/extractdot';
 
 /**
  * Renders the `Business Components` section of Code Mapper
  * The rendered UI element containing the section's title, graph visualization, and toolbar.
  */
 const BusinessComponents: React.FC = () => {
+  const { bizCompDOT, setBizCompDOT } = useStore();
   const { isToolbarOpen, toggleToolbar } = useToolbarStore();
+
+  const [gptResponse, setGptResponse] = useState<string | null>(null);
+
+  const handleResponse = (res: string | null) => setGptResponse(res);
+
+  useEffect(() => {
+    if (gptResponse) {
+      const dotFromGPT = extractDotContent(gptResponse);
+      setBizCompDOT(dotFromGPT);
+    }
+  }, [gptResponse]);
 
   return (
     <>
       <div className='font-semibold h1'>Business Components</div>
-      <div className='w-full h-screen overflow-hidden'>
-        
-        {/* 
-            Main graph component that renders data from "dot format"
-            TODO: Replace the `dotData` with data from `GptComponent` 
-        */}
-        <AnalysisGraph dotData={dotData} />
-      </div>
 
-      {/* React component displays `Global` and `Local` understandings */}
-      <Toolbar
-        isOpen={isToolbarOpen}
-        onClose={toggleToolbar}
-        type='BUSINESS'
-      />
+      {bizCompDOT && <AnalysisGraph dotData={bizCompDOT} />}
+
+      <Toolbar isOpen={isToolbarOpen} onClose={toggleToolbar} type='BUSINESS' />
+
+      {!bizCompDOT && (
+        <GptComponent
+          queryType='systemStructureDot'
+          onResponseReceived={handleResponse}
+        />
+      )}
     </>
   );
 };

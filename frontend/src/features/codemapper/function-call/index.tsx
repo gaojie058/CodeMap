@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Toolbar from '../toolbar';
 import { AnalysisGraph } from '../graph';
-import { dotData } from '@/data/dotData';
+import { GptComponent } from '@gpt/GptComponent';
 import useToolbarStore from '@/store/toolbarStore';
+import { extractDotContent } from '@/utils/extractdot';
+import useStore from '@/store/store';
 
 /**
  * Renders the `Function Call` section of Code Mapper
@@ -10,25 +12,42 @@ import useToolbarStore from '@/store/toolbarStore';
  */
 const FunctionCall: React.FC = () => {
   const { isToolbarOpen, toggleToolbar } = useToolbarStore();
+  const { fnCallDOT, setFnCallDOT } = useStore();
+
+  const [gptResponse, setGptResponse] = useState<string | null>(null);
+
+  const handleResponse = (response: string | null) => {
+    setGptResponse(response);
+  };
+
+  useEffect(() => {
+    if (gptResponse) {
+      const dotFromGPT = extractDotContent(gptResponse);
+      setFnCallDOT(dotFromGPT);
+    }
+  }, [gptResponse]);
 
   return (
     <>
       <div className='font-semibold h1'>Function Call</div>
-      <div className='w-full h-screen overflow-hidden'>
 
-        {/* 
-            Main graph component that renders data from "dot format"
-            TODO: Replace the `dotData` with data from `GptComponent` 
-        */}
-        <AnalysisGraph dotData={dotData} />
+      <div className='w-full h-screen overflow-hidden'>
+        {fnCallDOT && <AnalysisGraph dotData={fnCallDOT} />}
       </div>
 
-      {/* React component displays `Global` and `Local` understandings */}
       <Toolbar
         isOpen={isToolbarOpen}
         onClose={toggleToolbar}
         type='FUNCTION_CALL'
       />
+
+      {!fnCallDOT && (
+        <GptComponent
+          // queryType='projectOverview'
+          queryType='inheritanceGraph'
+          onResponseReceived={handleResponse}
+        />
+      )}
     </>
   );
 };

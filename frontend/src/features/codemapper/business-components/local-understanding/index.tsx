@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
-import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
+import React, { useEffect, useState } from 'react';
+import useStore from '@/store/store';
+import { GptComponent } from '@gpt/GptComponent';
+import useToolbarStore from '@/store/toolbarStore';
+import { extractDotContent } from '@/utils/extractdot';
+import { AnalysisGraph, LocalGraph } from '../../graph';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { BaseDialog } from '@/components/Elements/Dialog/BaseDialog';
+import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
 
 // defines `understandings` that will be rendered as collapsible items
 // TODO: add data from `GptComponent`
@@ -33,15 +39,41 @@ const relevantBusinessFlow = [
  * This component is used within the `Toolbar` to display a list of items with collapsible details.
  */
 const BizLocalUnderstanding: React.FC = () => {
+  // dummy graph setup
+  const [isMiniGraphOpen, setIsMiniGraphOpen] = useState<boolean>(false);
+
   //dummy disclosure setup
   const [isHighlightedExpOpen, setIsHighlightedExpOpen] =
     useState<boolean>(false);
   const [isRelevantExpOpen, setIsRelevantExpOpen] = useState<boolean>(false);
 
+  const { selectedNode } = useToolbarStore();
+
+  const [gptResponseBizLocalGraph, setGptResponseBizLocalGraph] = useState<string | null>(null);
+  const [gptResHighlightedBizFlow, setGptResHighlightedBizFlow] = useState<string | null>(null);
+  const [gptResRelevantBizFlow, setGptResRelevantBizFlow] = useState<string | null>(null);
+
+  const handleResBizLocalGraph = (res: string | null) => setGptResponseBizLocalGraph(res);
+  const handleResHighlightedBizFlow = (res: string | null) => setGptResHighlightedBizFlow(res);
+  const handleResRelevantBizFlow = (res: string | null) => setGptResRelevantBizFlow(res);
+  
+
+  const { bizCompLocalDOT, setBizCompLocalDOT } = useStore();
+
+  useEffect(() => {
+    if (gptResponseBizLocalGraph) setBizCompLocalDOT(extractDotContent(gptResponseBizLocalGraph));
+  }, [gptResponseBizLocalGraph]);
+
   return (
     <>
       <div className='h-screen w-full'>
         <div className='mx-auto w-full max-w-lg flex flex-col gap-4 rounded-xl'>
+          <LocalGraph
+            dot={bizCompLocalDOT}
+            onExpand={() => setIsMiniGraphOpen(true)}
+            onRegenerate={() => {}}
+          />
+
           {/* 
             Collapsible Buttons in `Local Understanding` 
             TODO: Add `disabled` state, if content is empty
@@ -53,7 +85,7 @@ const BizLocalUnderstanding: React.FC = () => {
                 onClick={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
                 className='w-full px-6 py-2.5 border border-zinc-200 rounded-lg flex justify-between items-center font-medium text-sm'
               >
-                Explain the highlighted inheritance flow
+                Explain the highlighted business flow
                 <ChevronDownIcon
                   className={`size-4 fill-white/60 ${
                     isHighlightedExpOpen
@@ -75,7 +107,7 @@ const BizLocalUnderstanding: React.FC = () => {
                 onClick={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
                 className='w-full px-6 py-2.5 border border-zinc-200 rounded-lg flex justify-between items-center font-medium text-sm'
               >
-                Relevant inheritance flow
+                Relevant business flow
                 <ChevronDownIcon
                   className={`size-4 fill-white/60 ${
                     isRelevantExpOpen
@@ -92,8 +124,40 @@ const BizLocalUnderstanding: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {(selectedNode && !bizCompLocalDOT) && (
+            <GptComponent
+              queryType='businessLocalGraph'
+              params={{ selectedNode }}
+              onResponseReceived={handleResBizLocalGraph}
+            />
+          )}
+
+          {/* {selectedNode && (
+            <GptComponent
+              queryType='businessFlowAnalysis'
+              params={{ selectedNode }}
+              onResponseReceived={handleResHighlightedBizFlow}
+            />
+          )}
+
+          {selectedNode && (
+            <GptComponent
+              queryType='componentRelationAnalysis'
+              params={{ selectedNode }}
+              onResponseReceived={handleResRelevantBizFlow}
+            />
+          )} */}
         </div>
       </div>
+
+      {/* Dialog that displays expanded `Mini Graph` in Local Understanding  */}
+      <BaseDialog
+        isOpen={isMiniGraphOpen}
+        onClose={() => setIsMiniGraphOpen(!isMiniGraphOpen)}
+      >
+        <AnalysisGraph dotData={bizCompLocalDOT} />
+      </BaseDialog>
     </>
   );
 };

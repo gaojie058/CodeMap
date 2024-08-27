@@ -11,6 +11,9 @@ import { functionCallFlowPrompt } from './functionCallFlow';
 import { projectAnalysisJsonPrompt } from './projectAnalysisJson';
 import { systemStructureDotPrompt } from './systemStructureDot';
 import { functionCallFlowDotPrompt } from './functionCallFlowDot';
+import { businessLocalGraphPrompt } from './businessLocalGraph';
+import { functionCallLocalDescPrompt } from './functionCallLocalDesc';
+import { functionCallLocalExplainPrompt } from './functionCallLocalExplain';
 
 export const prompts = {
   projectAnalysis: projectAnalysisPrompt,
@@ -24,6 +27,9 @@ export const prompts = {
   projectAnalysisJson: projectAnalysisJsonPrompt,
   systemStructureDot: systemStructureDotPrompt,
   functionCallFlowDot: functionCallFlowDotPrompt,
+  businessLocalGraph: businessLocalGraphPrompt,
+  functionCallLocalDesc: functionCallLocalDescPrompt,
+  functionCallLocalExplain: functionCallLocalExplainPrompt,
   // 添加更多 prompts...
 };
 

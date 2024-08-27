@@ -3,73 +3,86 @@
 // TODO: Remove file before production
 
 export const dotData = `
-  # http://www.graphviz.org/content/cluster
+//   digraph FunctionCallFlow {
+//     rankdir=TB;
+//     node [shape=box];
+//     edge [];
 
-  digraph FlaskStructure {
+//     // Main functions
+//     dispatch_request;
+//     full_dispatch_request;
+//     finalize_request;
+//     make_default_options_response;
+//     preprocess_request;
+//     process_response;
+//     do_teardown_request;
+//     add_url_rule;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10]
-    edge [fontname="Helvetica", fontsize=8, fontcolor=gray30]
+//     // Secondary functions
+//     handle_user_exception;
+//     raise_routing_exception;
+//     view_functions;
+//     make_response;
+//     ensure_sync;
+//     before_request_funcs;
+//     template_context_processors;
+//     url_value_preprocessors;
+//     after_request_funcs;
+//     teardown_request_funcs;
 
-    // Flask Core Module
-    subgraph cluster_flask_core {
-        label="Flask Core"
-        style=filled
-        color=lightblue
-        node [color=white]
+//     // Relationships
+//     dispatch_request -> make_default_options_response;
+//     dispatch_request -> view_functions;
+//     dispatch_request -> ensure_sync;
 
-        Core_App [label="App (Handles request routing, configuration, and context management)"]
-        Core_CLI [label="CLI (Provides command-line interface for application management)"]
-        Core_Sessions [label="Sessions (Manages user session data across requests)"]
-        Core_Logging [label="Logging (Facilitates application event logging)"]
-        Core_Config [label="Config (Manages application configuration settings)"]
+//     full_dispatch_request -> dispatch_request;
+//     full_dispatch_request -> preprocess_request;
+//     full_dispatch_request -> handle_user_exception;
+//     full_dispatch_request -> finalize_request;
 
-        Core_App -> Core_CLI [label="Initializes CLI commands for app management"]
-        Core_App -> Core_Sessions [label="Links sessions to request context for state management"]
-        Core_App -> Core_Logging [label="Logs app events for debugging and auditing"]
-        Core_App -> Core_Config [label="Applies configuration settings to the app context"]
-    }
+//     finalize_request -> make_response;
+//     finalize_request -> process_response;
 
-    // Flask Testing Module
-    subgraph cluster_flask_testing {
-        label="Flask Testing"
-        style=filled
-        color=lightgreen
-        node [color=white]
+//     preprocess_request -> url_value_preprocessors;
+//     preprocess_request -> before_request_funcs;
 
-        Test_Logging [label="Test Logging (Validates logging mechanisms)"]
-        Test_CLI [label="Test CLI (Tests command-line interface functionality)"]
-        Test_Apps [label="Test Apps (Simulates real-world application scenarios for testing)"]
+//     process_response -> after_request_funcs;
+//     process_response -> save_session;
 
-        Test_Logging -> Core_Logging [label="Tests logging output and handlers"]
-        Test_CLI -> Core_CLI [label="Validates command execution and app context integration"]
-        Test_Apps -> Core_App [label="Simulates real-world application flows for end-to-end testing"]
-    }
+//     do_teardown_request -> teardown_request_funcs;
 
-    // Flask Submodule (Sansio)
-    subgraph cluster_flask_sansio {
-        label="Sansio"
-        style=filled
-        color=lightyellow
-        node [color=white]
+//     add_url_rule -> view_functions;
 
-        Sansio_Blueprints [label="Blueprints (Manages modular app routes and templates)"]
-        Sansio_App [label="App (Provides minimal app framework without HTTP context)"]
-        Sansio_Scaffold [label="Scaffold (Offers utilities for building the app structure)"]
+//     // Subgraph for full_dispatch_request
+//     subgraph cluster_full_dispatch_request {
+//         label = "full_dispatch_request flow";
+//         node [shape=box];
+//         preprocess_request -> dispatch_request -> handle_user_exception;
+//     }
 
-        Sansio_App -> Sansio_Blueprints [label="Integrates blueprints into the application structure"]
-        Sansio_Scaffold -> Sansio_App [label="Scaffolds the app with initial settings and structure"]
-    }
+//     // Subgraph for process_response
+//     subgraph cluster_process_response {
+//         label = "process_response flow";
+//         node [shape=box];
+//         after_request_funcs -> save_session;
+//     }
 
-    // Inter-module relationships
-    Core_App -> Sansio_App [label="Uses Sansio as lightweight core for non-HTTP functionalities"]
-    Sansio_Blueprints -> Test_Apps [label="Blueprint integration tested through real-world scenarios"]
-    Test_Apps -> Core_App [label="Verifies app behavior under real-world conditions"]
+//     // Subgraph for preprocess_request
+//     subgraph cluster_preprocess_request {
+//         label = "preprocess_request flow";
+//         node [shape=box];
+//         url_value_preprocessors -> before_request_funcs;
+//     }
 
-    // External dependencies
-    External_Database [label="Database", shape=ellipse, style=dashed]
-    External_HTTPServer [label="HTTP Server", shape=ellipse, style=dashed]
+//     // Notes
+//     note1 [shape=note, label="Ensure functions are handling respective request contexts"];
+//     note2 [shape=note, label="Handle exceptions in dispatch request"];
+//     note3 [shape=note, label="Save session data during process_response"];
 
-    Core_App -> External_HTTPServer [label="Serves HTTP requests via external server", style=dashed]
-    Core_Sessions -> External_Database [label="Stores session data externally", style=dashed]
-}
+//     dispatch_request -> note2 [style=dotted];
+//     process_response -> note3 [style=dotted];
+//     ensure_sync -> note1 [style=dotted];
+// }
+
+
 `
