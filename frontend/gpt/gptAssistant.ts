@@ -1,4 +1,4 @@
-import fetch, { RequestInit, HeadersInit } from 'node-fetch';
+// import fetch, { RequestInit, HeadersInit } from 'node-fetch';
 import { prompts, PromptName } from './prompts';
 
 const apiKey = 'sk-REDACTED_vnHWZND0tcCGPBEPFIT3BlbkFJ3wHo4HdobFFJeGq4K07l5esFPS5RfdehjwZdYkx7UA';

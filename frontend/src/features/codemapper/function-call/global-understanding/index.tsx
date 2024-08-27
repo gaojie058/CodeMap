@@ -1,5 +1,6 @@
 import React from 'react';
 import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
+// import { GptComponent } from '@gpt/GptComponent';
 
 // defines `understandings` that will be rendered as collapsible items
 // TODO: add data from `GptComponent`
@@ -37,6 +38,8 @@ const FnGlobalUnderstanding: React.FC = () => {
         {understandings.map((item, index) => (
           <DisclosureItem item={item} key={index} />
         ))}
+
+        {/* <GptComponent queryType='systemStructureDot' /> */}
       </div>
     </>
   );

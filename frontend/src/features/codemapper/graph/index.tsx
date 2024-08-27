@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { graphviz } from 'd3-graphviz';
 import './style/graph.style.css';
+import useToolbarStore from '@/store/toolbarStore';
 
 interface AnalysisGraphProps {
   dotData: string;
@@ -10,12 +11,15 @@ interface AnalysisGraphProps {
 export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({ dotData }) => {
   const graphRef = useRef<HTMLDivElement | null>(null);
 
+  const { setSelectedNode, isToolbarOpen, setIsToolbarOpen } = useToolbarStore();
+  
   // TODO: Triggers `Toolbar` when clicked
   const handleNodeClick = useCallback((event: MouseEvent) => {
     const target = event.currentTarget as SVGElement;
     const labelElement = target.querySelector('text');
     const label = labelElement?.textContent || '';
-    alert(`Node label: ${label}`);
+    if(!isToolbarOpen) setIsToolbarOpen(true);
+    setSelectedNode(label);
   }, []);
 
   const handleEdgeClick = useCallback((event: MouseEvent) => {

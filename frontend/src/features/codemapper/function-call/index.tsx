@@ -2,18 +2,18 @@ import React from 'react';
 import Toolbar from '../toolbar';
 import { AnalysisGraph } from '../graph';
 import { dotData } from '@/data/dotData';
-import useSlideoverStore from '@/store/slideoverStore';
+import useToolbarStore from '@/store/toolbarStore';
 
 /**
  * Renders the `Function Call` section of Code Mapper
  * The rendered UI element containing the section's title, graph visualization, and toolbar.
  */
 const FunctionCall: React.FC = () => {
-  const { isSlideoverOpen, toggleSlideover } = useSlideoverStore();
+  const { isToolbarOpen, toggleToolbar } = useToolbarStore();
 
   return (
     <>
-      <div>Function Call</div>
+      <div className='font-semibold h1'>Function Call</div>
       <div className='w-full h-screen overflow-hidden'>
 
         {/* 
@@ -25,8 +25,8 @@ const FunctionCall: React.FC = () => {
 
       {/* React component displays `Global` and `Local` understandings */}
       <Toolbar
-        isOpen={isSlideoverOpen}
-        onClose={toggleSlideover}
+        isOpen={isToolbarOpen}
+        onClose={toggleToolbar}
         type='FUNCTION_CALL'
       />
     </>

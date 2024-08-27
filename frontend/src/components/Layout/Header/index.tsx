@@ -1,7 +1,7 @@
 import React from 'react';
 import CodeMapLogo from '/logo.svg';
 import styled from '@emotion/styled';
-import useSlideoverStore from '@/store/slideoverStore';
+import useToolbarStore from '@/store/toolbarStore';
 import Button from '@/components/Elements/Button/Button';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import IconButton from '@/components/Elements/Button/IconButton';
@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
   const navigateToBiz = () => navigate('/understand/business-comps');
   const navigateToFn = () => navigate('/understand/function-call');
 
-  const toggleToolkit = useSlideoverStore((state) => state.toggleSlideover);
+  const toggleToolbar = useToolbarStore((state) => state.toggleToolbar);
 
   return (
     <>
@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
                     <Button onClick={navigateToFn} style='outline'>
                       Function Call
                     </Button>
-                    <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolkit} className='ml-auto'/>
+                    <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/>
                   </>
                 }
               />
@@ -52,7 +52,7 @@ export const Header: React.FC = () => {
                     <Button onClick={navigateToFn}>
                       Function Call
                     </Button>
-                    <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolkit} className='ml-auto'/>
+                    <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/>
                   </>
                 }
               />

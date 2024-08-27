@@ -2,14 +2,14 @@ import React from 'react';
 import Toolbar from '../toolbar';
 import { AnalysisGraph } from '../graph';
 import { dotData } from '@/data/dotData';
-import useSlideoverStore from '@/store/slideoverStore';
+import useToolbarStore from '@/store/toolbarStore';
 
 /**
  * Renders the `Business Components` section of Code Mapper
  * The rendered UI element containing the section's title, graph visualization, and toolbar.
  */
 const BusinessComponents: React.FC = () => {
-  const { isSlideoverOpen, toggleSlideover } = useSlideoverStore();
+  const { isToolbarOpen, toggleToolbar } = useToolbarStore();
 
   return (
     <>
@@ -25,8 +25,8 @@ const BusinessComponents: React.FC = () => {
 
       {/* React component displays `Global` and `Local` understandings */}
       <Toolbar
-        isOpen={isSlideoverOpen}
-        onClose={toggleSlideover}
+        isOpen={isToolbarOpen}
+        onClose={toggleToolbar}
         type='BUSINESS'
       />
     </>

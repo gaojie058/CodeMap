@@ -2,3 +2,18 @@
   height: 100%;
   width: 100%;
 }
+
+#graph-container svg .node:hover path {
+  stroke: #000;
+  stroke-width: 1px;
+  cursor: pointer;
+}
+
+#graph-container svg .edge path {
+  stroke-width: 2px;
+}
+
+#graph-container svg .edge:hover path {
+  stroke-width: 3px;
+  cursor: pointer;
+}
