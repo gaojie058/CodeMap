@@ -1,7 +1,7 @@
-// import fetch, { RequestInit, HeadersInit } from 'node-fetch';
+// src/gpt/gptAssistant.ts
+
 import { prompts, PromptName } from './prompts';
 
-// const apiKey = 'sk-REDACTED_vnHWZND0tcCGPBEPFIT3BlbkFJ3wHo4HdobFFJeGq4K07l5esFPS5RfdehjwZdYkx7UA';
 const apiKey = 'sk-REDACTED';
 const apiBase = "https://api.openai.com/v1";
 
@@ -50,7 +50,12 @@ async function updateAssistant(assistantId: string) {
     return updatedAssistant;
 }
 
-export async function useAssistant(assistantId: string, promptName: PromptName, content: string): Promise<string> {
+export async function useAssistant(
+    assistantId: string, 
+    promptName: PromptName, 
+    content: string,
+    responseFormat?: any
+): Promise<any> {
     console.log(`Using assistant ${assistantId}...`);
     
     const thread = await makeRequest('/threads', 'POST');
@@ -65,7 +70,10 @@ export async function useAssistant(assistantId: string, promptName: PromptName, 
     });
     console.log("Message added:", JSON.stringify(message, null, 2));
 
-    const runBody = { assistant_id: assistantId };
+    const runBody: any = { assistant_id: assistantId };
+    if (responseFormat) {
+        runBody.response_format = responseFormat;
+    }
     console.log('Run creation request body:', JSON.stringify(runBody, null, 2));
     const run = await makeRequest(`/threads/${thread.id}/runs`, 'POST', runBody);
     console.log("Run created:", JSON.stringify(run, null, 2));
@@ -84,6 +92,17 @@ export async function useAssistant(assistantId: string, promptName: PromptName, 
 
     const messages = await makeRequest(`/threads/${thread.id}/messages`);
     console.log("Retrieved messages:", JSON.stringify(messages, null, 2));
+    
+    // 如果有 responseFormat，尝试解析 JSON
+    if (responseFormat && responseFormat.type === "json_schema") {
+        try {
+            return JSON.parse(messages.data[0].content[0].text.value);
+        } catch (error) {
+            console.error("Failed to parse JSON response:", error);
+            return messages.data[0].content[0].text.value;
+        }
+    }
+    
     return messages.data[0].content[0].text.value;
 }
 

@@ -7,11 +7,11 @@ import { QueryType, queryDefinitions, generateContent } from './queryDefinitions
 interface GptComponentProps {
   queryType: QueryType;
   params?: Record<string, string>;
-  onResponseReceived?: (response: string | null) => void;
+  onResponseReceived?: (response: any) => void; // 修改为 any 类型
 }
 
 export const GptComponent: React.FC<GptComponentProps> = ({ queryType, params = {}, onResponseReceived }) => {
-  const [response, setResponse] = useState<string | null>(null);
+  const [response, setResponse] = useState<any>(null); // 修改为 any 类型
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -20,9 +20,9 @@ export const GptComponent: React.FC<GptComponentProps> = ({ queryType, params = 
       try {
         setLoading(true);
         const assistantId = await initializeAssistant();
-        const { promptName } = queryDefinitions[queryType];
+        const { promptName, responseFormat } = queryDefinitions[queryType];
         const content = generateContent(queryType, params);
-        const result = await useAssistant(assistantId, promptName, content);
+        const result = await useAssistant(assistantId, promptName, content, responseFormat);
         setResponse(result);
         if (onResponseReceived) {
           onResponseReceived(result);
@@ -35,7 +35,7 @@ export const GptComponent: React.FC<GptComponentProps> = ({ queryType, params = 
     };
 
     fetchData();
-  }, []); // 空依赖数组，确保只运行一次
+  }, [queryType, params, onResponseReceived]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -48,7 +48,7 @@ export const GptComponent: React.FC<GptComponentProps> = ({ queryType, params = 
   return (
     <div>
       <h2>{queryDefinitions[queryType].description}</h2>
-      <pre>{response}</pre>
+      <pre>{JSON.stringify(response, null, 2)}</pre>
     </div>
   );
 };

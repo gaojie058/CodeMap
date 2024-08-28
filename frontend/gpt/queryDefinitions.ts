@@ -1,11 +1,13 @@
 // src/gpt/queryDefinitions.ts
 
 import { PromptName } from './prompts';
+import { projectAnalysisJsonFormat } from './formats/projectAnalysisJsonFormat';
 
 export interface QueryDefinition {
   promptName: PromptName;
   contentTemplate: string;
   description: string;
+  responseFormat?: any; // 新增字段
 }
 
 export type QueryType = keyof typeof queryDefinitions;
@@ -54,7 +56,8 @@ export const queryDefinitions = {
   projectAnalysisJson: {
     promptName: 'projectAnalysisJson' as PromptName,
     contentTemplate: 'Analyze the project structure and return detailed information in JSON format.',
-    description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
+    description: 'Generates a comprehensive JSON analysis of the project structure and functionality',
+    responseFormat: projectAnalysisJsonFormat
   },
   systemStructureDot: {
     promptName: 'systemStructureDot' as PromptName,
