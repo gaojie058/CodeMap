@@ -1,101 +1,31 @@
 export const functionCallLocalExplainPrompt = {
   name: 'functionCallLocalExplain',
-  content: `In this {selectedNode} inheritance graph, explain to me its relevant inheritance flow in a JSON format:
-  
-  {
-    "project_name": "Generic Project Structure",
-    "core_components": {
-      "main_component": {
-        "name": "MainComponent",
-        "file": "main_component_file",
-        "inherits_from": "BaseComponent",
-        "key_relationships": [
-          "creates ComponentA",
-          "uses ComponentB",
-          "manages ComponentC"
-        ]
-      },
-      "base_component": {
-        "name": "BaseComponent",
-        "file": "base_component_file",
-        "inherits_from": "RootComponent"
-      },
-      "root_component": {
-        "name": "RootComponent",
-        "file": "root_component_file",
-        "inherits_from": null,
-        "description": "Root component for the project structure"
-      }
+  content: `Explain the relevant inheritance flow for the selected node {selectedNode}. Provide the output in the following JSON format:
+
+
+{
+  "relevantInheritance": [
+    {
+      "name": "Inheritance Flow Overview",
+      "key": "inheritance_flow_overview",
+      "value": "Brief overview of the relevant inheritance flow"
     },
-    "key_modules": {
-      "module_a": {
-        "name": "ModuleA",
-        "file": "module_a_file",
-        "inherits_from": "ExternalBaseA",
-        "description": "Handles specific functionality A"
-      },
-      "module_b": {
-        "name": "ModuleB",
-        "file": "module_b_file",
-        "inherits_from": "ExternalBaseB",
-        "description": "Handles specific functionality B"
-      }
+    {
+      "name": "Role of the Inheritance Flow in the Overall Framework",
+      "key": "role_in_framework",
+      "value": "Description of how this inheritance flow fits into the larger system"
     },
-    "auxiliary_components": {
-      "component_a": {
-        "name": "ComponentA",
-        "file": "component_a_file",
-        "inherits_from": null,
-        "description": "Manages aspect A of the project"
-      },
-      "component_b": {
-        "name": "ComponentB",
-        "file": "component_b_file",
-        "inherits_from": null,
-        "description": "Manages aspect B of the project"
+    {
+      "name": "Roles of Each function understand this Inheritance Flow",
+      "key": "function_roles",
+      "value": {
+        "function1": "Role and purpose of function1",
+        "function2": "Role and purpose of function2"
+        // ... more functions as needed
       }
-    },
-    "testing_utilities": {
-      "test_utility": {
-        "name": "TestUtility",
-        "file": "test_utility_file",
-        "inherits_from": "ExternalTestBase",
-        "description": "Testing utility for the project"
-      }
-    },
-    "inheritance_relationships": [
-      {
-        "child": "MainComponent",
-        "parent": "BaseComponent"
-      },
-      {
-        "child": "BaseComponent",
-        "parent": "RootComponent"
-      },
-      {
-        "child": "ModuleA",
-        "parent": "ExternalBaseA"
-      },
-      {
-        "child": "ModuleB",
-        "parent": "ExternalBaseB"
-      },
-      {
-        "child": "TestUtility",
-        "parent": "ExternalTestBase"
-      }
-    ],
-    "key_concepts": [
-      "The project extends base and root components to provide core functionality",
-      "Key modules extend external bases for specific functionalities",
-      "Auxiliary components manage different aspects of the project",
-      "TestUtility extends an external base for project-specific testing capabilities"
-    ],
-    "additional_notes": [
-      "This structure is language-agnostic and can be applied to various software projects",
-      "File names and component names should be adjusted based on the specific project",
-      "Inheritance relationships and key concepts may vary depending on the project architecture"
-    ]
-  }
-  `
-  };
+    }
+  ]
+}
+
+Ensure the output is strictly in this JSON format without any additional text or explanations.`
+};
