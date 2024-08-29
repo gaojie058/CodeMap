@@ -9,16 +9,17 @@ import {
 interface DisclosureItemProps {
   item: {
     name: string;
+    key: string;
+    value: string | null;
   };
-  data?: string | null;
 }
 
 // DisclosureItem is a reusable component that renders a collapsible disclosure item
 // It shows a button with an item name and a chevron icon that indicates whether the panel is open or closed.
 // The panel contains detailed information about the item, which can be replaced with dynamic content if needed.
-const DisclosureItem: React.FC<DisclosureItemProps> = ({ item, data }) => {
+const DisclosureItem: React.FC<DisclosureItemProps> = ({ item}) => {
   return (
-    <Disclosure as='div' className='p-6'>
+    <Disclosure as='div' className='p-6' key={item.key}>
       {({ open }) => (
         <>
           <DisclosureButton className='group flex w-full items-center justify-between text-left'>
@@ -32,26 +33,7 @@ const DisclosureItem: React.FC<DisclosureItemProps> = ({ item, data }) => {
             />
           </DisclosureButton>
           <DisclosurePanel className='mt-2 text-sm/5 text-black/50'>
-            {!data && (
-              <>
-                {' '}
-                flask/src/flask/init.py: Initializes the Flask module, making it
-                accessible when imported. flask/src/flask/app.py: Contains the
-                central class for Flask application, defining how the
-                application behaves. flask/src/flask/cli.py: Handles the
-                command-line interface for Flask applications.
-                flask/src/flask/config.py: Manages the configuration of a Flask
-                application. flask/src/flask/logging.py: Provides logging
-                capabilities within Flask applications.
-                flask/src/flask/sessions.py: Handles user sessions in Flask.
-                flask/tests/test_logging.py: Tests the logging functionality of
-                Flask. flask/tests/test_cli.py: Tests the command-line interface
-                functionality. flask/tests/test_apps: Contains test applications
-                to simulate real-world scenarios.
-              </>
-            )}
-
-            {data && data}
+            {item.value}
           </DisclosurePanel>
         </>
       )}

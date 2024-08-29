@@ -13,24 +13,36 @@ import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
 const highlightedBusinessFlow = [
   {
     name: 'Business Flow Overview',
+    key:'',
+    value:'',
   },
   {
     name: 'Role of the Highlighted Business Flow in the Overall Framework',
+    key:'',
+    value:'',
   },
   {
     name: 'Roles of Each Component Under This Business Flow',
+    key:'',
+    value:'',
   },
 ];
 
 const relevantBusinessFlow = [
   {
     name: 'Business Flow Overview',
+    key:'',
+    value:'',
   },
   {
     name: 'Role of the Highlighted Business Flow in the Overall Framework',
+    key:'',
+    value:'',
   },
   {
     name: 'Roles of Each Component Under This Business Flow',
+    key:'',
+    value:'',
   },
 ];
 
@@ -56,7 +68,7 @@ const BizLocalUnderstanding: React.FC = () => {
   const handleResBizLocalGraph = (res: string | null) => setGptResponseBizLocalGraph(res);
   const handleResHighlightedBizFlow = (res: string | null) => setGptResHighlightedBizFlow(res);
   const handleResRelevantBizFlow = (res: string | null) => setGptResRelevantBizFlow(res);
-  
+
 
   const { bizCompLocalDOT, setBizCompLocalDOT } = useStore();
 
@@ -74,8 +86,8 @@ const BizLocalUnderstanding: React.FC = () => {
             onRegenerate={() => {}}
           />
 
-          {/* 
-            Collapsible Buttons in `Local Understanding` 
+          {/*
+            Collapsible Buttons in `Local Understanding`
             TODO: Add `disabled` state, if content is empty
         */}
           <div className='my-2 flex flex-col gap-4'>
