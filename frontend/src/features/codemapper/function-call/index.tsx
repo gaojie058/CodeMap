@@ -44,7 +44,7 @@ const FunctionCall: React.FC = () => {
       {!fnCallDOT && (
         <GptComponent
           // queryType='projectOverview'
-          queryType='inheritanceGraph'
+          queryType='P6_R6_inheritanceGraph'
           onResponseReceived={handleResponse}
         />
       )}

@@ -70,7 +70,6 @@ const FnLocalUnderstanding: React.FC = () => {
       setFnCallLocalDOT(extractDotContent(gptResFnCallLocalGraph));
       console.log(extractDotContent(gptResFnCallLocalGraph));
     }
-
   }, [gptResFnCallLocalGraph]);
 
   return (
@@ -135,15 +134,15 @@ const FnLocalUnderstanding: React.FC = () => {
 
         {selectedNode && !fnCallLocalDOT && (
           <GptComponent
-            queryType='functionCallFlow'
+            queryType='P9_R9_functionCallFlow'
             params={{ selectedNode }}
             onResponseReceived={handleResFnCallLocalGraph}
           />
         )}
 
-        {/* {selectedNode && (
+        {selectedNode && (
           <GptComponent
-            queryType='functionCallLocalDesc'
+            queryType='P8_R8_functionCallLocalDesc'
             params={{ selectedNode }}
             onResponseReceived={handleResHighlightedFnCallFlow}
           />
@@ -151,11 +150,11 @@ const FnLocalUnderstanding: React.FC = () => {
 
         {selectedNode && (
           <GptComponent
-            queryType='functionCallLocalExplain'
+            queryType='P10_R10_functionCallLocalExplain'
             params={{ selectedNode }}
             onResponseReceived={handleResRelevantFnCallFlow}
           />
-        )} */}
+        )}
       </div>
 
       {/* Dialog that displays expanded `Mini Graph` in Local Understanding  */}

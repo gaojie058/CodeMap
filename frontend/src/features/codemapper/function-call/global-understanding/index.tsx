@@ -73,7 +73,7 @@ const FnGlobalUnderstanding: React.FC = () => {
         {/* NEED TO CHANGE PROMPT */}
         {!fnGlobalUnderstanding && (
           <GptComponent
-            queryType='projectOverview'
+            queryType='P7_R7_projectStructureJson'
             onResponseReceived={handleResponse}
           />
         )}

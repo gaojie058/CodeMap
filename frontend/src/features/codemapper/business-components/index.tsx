@@ -31,7 +31,7 @@ const BusinessComponents: React.FC = () => {
     if (!bizCompDOT) {
       return (
         <GptComponent
-          queryType='systemStructureDot'
+          queryType='P2_R2_systemStructureDot'
           onResponseReceived={handleResponse}
         />
       );

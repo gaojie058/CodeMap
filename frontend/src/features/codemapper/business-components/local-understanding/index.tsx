@@ -139,7 +139,7 @@ const BizLocalUnderstanding: React.FC = () => {
 
           {(selectedNode && !bizCompLocalDOT) && (
             <GptComponent
-              queryType='businessLocalGraph'
+              queryType='P3_R3_businessLocalGraph'
               params={{ selectedNode }}
               onResponseReceived={handleResBizLocalGraph}
             />
@@ -147,7 +147,7 @@ const BizLocalUnderstanding: React.FC = () => {
 
           {/* {selectedNode && (
             <GptComponent
-              queryType='businessFlowAnalysis'
+              queryType='P4_R4_businessFlowAnalysis'
               params={{ selectedNode }}
               onResponseReceived={handleResHighlightedBizFlow}
             />
@@ -155,7 +155,7 @@ const BizLocalUnderstanding: React.FC = () => {
 
           {selectedNode && (
             <GptComponent
-              queryType='componentRelationAnalysis'
+              queryType='P5_R5_componentRelationAnalysis'
               params={{ selectedNode }}
               onResponseReceived={handleResRelevantBizFlow}
             />

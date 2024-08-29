@@ -11,23 +11,23 @@ export interface QueryDefinition {
 export type QueryType = keyof typeof queryDefinitions;
 
 export const queryDefinitions = {
-  projectAnalysis: {
-    promptName: 'projectAnalysis' as PromptName,
+  P1_R1_projectAnalysis: {
+    promptName: 'P1_R1_projectAnalysis' as PromptName,
     contentTemplate: 'Analyze the following project: {projectName}',
     description: 'Analyzes the structure and functionality of a project'
   },
-  systemStructure: {
-    promptName: 'systemStructure' as PromptName,
+  P2_R2_systemStructure: {
+    promptName: 'P2_R2_systemStructure' as PromptName,
     contentTemplate: 'Generate a system structure diagram for the current project.',
     description: 'Generates a detailed system structure diagram using DOT language'
   },
-  businessFlowAnalysis: {
-    promptName: 'businessFlowAnalysis' as PromptName,
+  P4_R4_businessFlowAnalysis: {
+    promptName: 'P4_R4_businessFlowAnalysis' as PromptName,
     contentTemplate: 'Analyze the following highlighted business flow: {highlightedBusinessFlow}',
     description: 'Analyzes a specific business flow within the project'
   },
-  componentRelationAnalysis: {
-    promptName: 'componentRelationAnalysis' as PromptName,
+  P5_R5_componentRelationAnalysis: {
+    promptName: 'P5_R5_componentRelationAnalysis' as PromptName,
     contentTemplate: 'could you help me understand which components are related to {relatedComponent}, and what is their main communication?',
     description: 'Analyzes the relationships and communications between components'
   },
@@ -36,53 +36,53 @@ export const queryDefinitions = {
     contentTemplate: 'Generate a comprehensive project overview based on the uploaded codebase.',
     description: 'Generates a detailed project overview in DOT language'
   },
-  inheritanceGraph: {
-    promptName: 'inheritanceGraph' as PromptName,
+  P6_R6_inheritanceGraph: {
+    promptName: 'P6_R6_inheritanceGraph' as PromptName,
     contentTemplate: 'Generate an inheritance graph based on the uploaded codebase.',
     description: 'Generates an inheritance graph in DOT language'
   },
-  inheritanceRelationExplanation: {
-    promptName: 'inheritanceRelationExplanation' as PromptName,
+  P8_R8_inheritanceRelationExplanation: {
+    promptName: 'P8_R8_inheritanceRelationExplanation' as PromptName,
     contentTemplate: 'Explain the inheritance relation: {inheritanceRelation}',
     description: 'Explains a specific inheritance relationship in the codebase'
   },
-  functionCallFlow: {
-    promptName: 'functionCallFlow' as PromptName,
+  P9_R9_functionCallFlow: {
+    promptName: 'P9_R9_functionCallFlow' as PromptName,
     contentTemplate: 'Generate function call flow for the selected node: {selectedNode}',
     description: 'Generates a function call flow diagram for a selected node in the inheritance graph'
   },
-  projectAnalysisJson: {
-    promptName: 'projectAnalysisJson' as PromptName,
+  P1_R1_projectAnalysisJson: {
+    promptName: 'P1_R1_projectAnalysisJson' as PromptName,
     contentTemplate: 'Analyze the project structure and return detailed information in JSON format.',
     description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
   },
-  systemStructureDot: {
-    promptName: 'systemStructureDot' as PromptName,
+  P2_R2_systemStructureDot: {
+    promptName: 'P2_R2_systemStructureDot' as PromptName,
     contentTemplate: 'Generate a detailed system structure diagram using DOT language.',
     description: 'Creates a DOT language representation of the system structure with detailed component relationships'
   },
-  functionCallFlowDot: {
-    promptName: 'functionCallFlowDot' as PromptName,
+  P9_R9_functionCallFlowDot: {
+    promptName: 'P9_R9_functionCallFlowDot' as PromptName,
     contentTemplate: 'Generate a function call flow diagram for the file or component: {fileOrComponent}',
     description: 'Generates a DOT language representation of the function call flow for a specific file or component'
   },
-  businessLocalGraph: {
-    promptName: 'businessLocalGraph' as PromptName,
+  P3_R3_businessLocalGraph: {
+    promptName: 'P3_R3_businessLocalGraph' as PromptName,
     contentTemplate: 'Generate a business component flow diagram for the selected node: {selectedNode}',
     description: 'Generates a DOT language representation of the business component flow for a specific file or component'
   },
-  functionCallLocalDesc: {
-    promptName: 'functionCallLocalDesc' as PromptName,
+  P8_R8_functionCallLocalDesc: {
+    promptName: 'P8_R8_functionCallLocalDesc' as PromptName,
     contentTemplate: 'Generate a function call flow for the selected node: {selectedNode}',
     description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
   },
-  functionCallLocalExplain: {
-    promptName: 'functionCallLocalExplain' as PromptName,
+  P10_R10_functionCallLocalExplain: {
+    promptName: 'P10_R10_functionCallLocalExplain' as PromptName,
     contentTemplate: 'Generate a function call flow for the selected node: {selectedNode}',
     description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
   },
-  projectStructureJson: {
-    promptName: 'projectStructureJson' as PromptName,
+  P7_R7_projectStructureJson: {
+    promptName: 'P7_R7_projectStructureJson' as PromptName,
     contentTemplate: 'Analyze the project structure and return detailed information in JSON format.',
     description: 'Generates a comprehensive JSON analysis of the project structure and module relationships'
   },
@@ -91,8 +91,8 @@ export const queryDefinitions = {
     contentTemplate: 'Generate a business component flow diagram for the selected node: {selectedNode}',
     description: 'Generates a DOT language representation of the business component flow for a specific component'
   },
-  inheritanceFlowExplanation: {
-    promptName: 'inheritanceFlowExplanation' as PromptName,
+  P10_R10_inheritanceFlowExplanation: {
+    promptName: 'P10_R10_inheritanceFlowExplanation' as PromptName,
     contentTemplate: 'Explain the inheritance flow for the selected node: {selectedNode}',
     description: 'Generates a JSON representation of the inheritance flow for a specific component'
   },
