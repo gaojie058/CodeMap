@@ -1,7 +1,7 @@
-// src/gpt/gptAssistant.ts
-
+// import fetch, { RequestInit, HeadersInit } from 'node-fetch';
 import { prompts, PromptName } from './prompts';
 
+// const apiKey = 'sk-REDACTED_vnHWZND0tcCGPBEPFIT3BlbkFJ3wHo4HdobFFJeGq4K07l5esFPS5RfdehjwZdYkx7UA';
 const apiKey = 'sk-REDACTED';
 const apiBase = "https://api.openai.com/v1";
 
@@ -50,12 +50,7 @@ async function updateAssistant(assistantId: string) {
     return updatedAssistant;
 }
 
-export async function useAssistant(
-    assistantId: string, 
-    promptName: PromptName, 
-    content: string,
-    responseFormat?: any
-): Promise<any> {
+export async function useAssistant(assistantId: string, promptName: PromptName, content: string): Promise<string> {
     console.log(`Using assistant ${assistantId}...`);
     
     const thread = await makeRequest('/threads', 'POST');
@@ -70,39 +65,40 @@ export async function useAssistant(
     });
     console.log("Message added:", JSON.stringify(message, null, 2));
 
-    const runBody: any = { assistant_id: assistantId };
-    if (responseFormat) {
-        runBody.response_format = responseFormat;
-    }
+    const runBody = { assistant_id: assistantId };
     console.log('Run creation request body:', JSON.stringify(runBody, null, 2));
     const run = await makeRequest(`/threads/${thread.id}/runs`, 'POST', runBody);
     console.log("Run created:", JSON.stringify(run, null, 2));
 
     let runStatus;
-    do {
-        await new Promise(resolve => setTimeout(resolve, 5000));
+    let retryCount = 0;
+    const maxRetries = 10;
+    let delay = 1000; // 初始延迟 1 秒
+
+    while (retryCount < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, delay));
         runStatus = await makeRequest(`/threads/${thread.id}/runs/${run.id}`);
         console.log("Run status:", JSON.stringify(runStatus, null, 2));
+        
+        if (runStatus.status === 'completed') {
+            break;
+        }
         
         if (runStatus.status === 'failed') {
             console.error('Run failed. Error:', JSON.stringify(runStatus.last_error, null, 2));
             throw new Error(`Run failed: ${runStatus.last_error.code} - ${runStatus.last_error.message}`);
         }
-    } while (runStatus.status !== 'completed' && runStatus.status !== 'failed');
+
+        retryCount++;
+        delay = Math.min(delay * 2, 30000); // 指数退避，最大延迟 30 秒
+    }
+
+    if (retryCount >= maxRetries) {
+        throw new Error("Maximum retries reached. Operation timed out.");
+    }
 
     const messages = await makeRequest(`/threads/${thread.id}/messages`);
     console.log("Retrieved messages:", JSON.stringify(messages, null, 2));
-    
-    // 如果有 responseFormat，尝试解析 JSON
-    if (responseFormat && responseFormat.type === "json_schema") {
-        try {
-            return JSON.parse(messages.data[0].content[0].text.value);
-        } catch (error) {
-            console.error("Failed to parse JSON response:", error);
-            return messages.data[0].content[0].text.value;
-        }
-    }
-    
     return messages.data[0].content[0].text.value;
 }
 

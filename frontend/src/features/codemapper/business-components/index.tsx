@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Toolbar from '../toolbar';
 import useStore from '@/store/store';
 import { AnalysisGraph } from '../graph';
@@ -6,24 +6,38 @@ import { GptComponent } from '@gpt/GptComponent';
 import useToolbarStore from '@/store/toolbarStore';
 import { extractDotContent } from '@/utils/extractdot';
 
-/**
- * Renders the `Business Components` section of Code Mapper
- * The rendered UI element containing the section's title, graph visualization, and toolbar.
- */
 const BusinessComponents: React.FC = () => {
   const { bizCompDOT, setBizCompDOT } = useStore();
   const { isToolbarOpen, toggleToolbar } = useToolbarStore();
 
   const [gptResponse, setGptResponse] = useState<string | null>(null);
 
-  const handleResponse = (res: string | null) => setGptResponse(res);
+  const handleResponse = useCallback((res: string | null) => setGptResponse(res), []);
+
+  const dotFromGPT = useMemo(() => {
+    if (gptResponse) {
+      return extractDotContent(gptResponse);
+    }
+    return null;
+  }, [gptResponse]);
 
   useEffect(() => {
-    if (gptResponse) {
-      const dotFromGPT = extractDotContent(gptResponse);
+    if (dotFromGPT) {
       setBizCompDOT(dotFromGPT);
     }
-  }, [gptResponse]);
+  }, [dotFromGPT, setBizCompDOT]);
+
+  const gptComponentMemo = useMemo(() => {
+    if (!bizCompDOT) {
+      return (
+        <GptComponent
+          queryType='systemStructureDot'
+          onResponseReceived={handleResponse}
+        />
+      );
+    }
+    return null;
+  }, [bizCompDOT, handleResponse]);
 
   return (
     <>
@@ -33,14 +47,9 @@ const BusinessComponents: React.FC = () => {
 
       <Toolbar isOpen={isToolbarOpen} onClose={toggleToolbar} type='BUSINESS' />
 
-      {!bizCompDOT && (
-        <GptComponent
-          queryType='systemStructureDot'
-          onResponseReceived={handleResponse}
-        />
-      )}
+      {gptComponentMemo}
     </>
   );
 };
 
-export default BusinessComponents;
+export default React.memo(BusinessComponents);

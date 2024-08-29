@@ -14,6 +14,9 @@ import { functionCallFlowDotPrompt } from './functionCallFlowDot';
 import { businessLocalGraphPrompt } from './businessLocalGraph';
 import { functionCallLocalDescPrompt } from './functionCallLocalDesc';
 import { functionCallLocalExplainPrompt } from './functionCallLocalExplain';
+import { projectStructureJsonPrompt } from './projectStructureJson'; // Add this line
+import { businessComponentFlowPrompt } from './businessComponentFlow';
+import { inheritanceFlowExplanationPrompt } from './inheritanceFlowExplanation';
 
 export const prompts = {
   projectAnalysis: projectAnalysisPrompt,
@@ -30,6 +33,9 @@ export const prompts = {
   businessLocalGraph: businessLocalGraphPrompt,
   functionCallLocalDesc: functionCallLocalDescPrompt,
   functionCallLocalExplain: functionCallLocalExplainPrompt,
+  projectStructureJson: projectStructureJsonPrompt,
+  businessComponentFlow: businessComponentFlowPrompt,
+  inheritanceFlowExplanation: inheritanceFlowExplanationPrompt,
   // 添加更多 prompts...
 };
 

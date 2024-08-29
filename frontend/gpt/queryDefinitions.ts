@@ -1,13 +1,11 @@
 // src/gpt/queryDefinitions.ts
 
 import { PromptName } from './prompts';
-import { projectAnalysisJsonFormat } from './formats/projectAnalysisJsonFormat';
 
 export interface QueryDefinition {
   promptName: PromptName;
   contentTemplate: string;
   description: string;
-  responseFormat?: any; // 新增字段
 }
 
 export type QueryType = keyof typeof queryDefinitions;
@@ -56,8 +54,7 @@ export const queryDefinitions = {
   projectAnalysisJson: {
     promptName: 'projectAnalysisJson' as PromptName,
     contentTemplate: 'Analyze the project structure and return detailed information in JSON format.',
-    description: 'Generates a comprehensive JSON analysis of the project structure and functionality',
-    responseFormat: projectAnalysisJsonFormat
+    description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
   },
   systemStructureDot: {
     promptName: 'systemStructureDot' as PromptName,
@@ -83,7 +80,22 @@ export const queryDefinitions = {
     promptName: 'functionCallLocalExplain' as PromptName,
     contentTemplate: 'Generate a function call flow for the selected node: {selectedNode}',
     description: 'Generates a comprehensive JSON analysis of the project structure and functionality'
-  }
+  },
+  projectStructureJson: {
+    promptName: 'projectStructureJson' as PromptName,
+    contentTemplate: 'Analyze the project structure and return detailed information in JSON format.',
+    description: 'Generates a comprehensive JSON analysis of the project structure and module relationships'
+  },
+  businessComponentFlow: {
+    promptName: 'businessComponentFlow' as PromptName,
+    contentTemplate: 'Generate a business component flow diagram for the selected node: {selectedNode}',
+    description: 'Generates a DOT language representation of the business component flow for a specific component'
+  },
+  inheritanceFlowExplanation: {
+    promptName: 'inheritanceFlowExplanation' as PromptName,
+    contentTemplate: 'Explain the inheritance flow for the selected node: {selectedNode}',
+    description: 'Generates a JSON representation of the inheritance flow for a specific component'
+  },
   // 可以继续添加更多的查询定义...
 };
 
