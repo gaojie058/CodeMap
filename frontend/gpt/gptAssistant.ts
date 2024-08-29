@@ -1,9 +1,13 @@
-// import fetch, { RequestInit, HeadersInit } from 'node-fetch';
+// src/gpt/gptAssistant.ts
+
 import { prompts, PromptName } from './prompts';
 
-// const apiKey = 'sk-REDACTED_vnHWZND0tcCGPBEPFIT3BlbkFJ3wHo4HdobFFJeGq4K07l5esFPS5RfdehjwZdYkx7UA';
 const apiKey = 'sk-REDACTED';
 const apiBase = "https://api.openai.com/v1";
+
+// 缓存机制
+let cachedAssistantId: string | null = null;
+const threadCache: Map<string, string> = new Map();
 
 async function makeRequest(endpoint: string, method: string = 'GET', body: any = null) {
     const url = `${apiBase}${endpoint}`;
@@ -50,16 +54,26 @@ async function updateAssistant(assistantId: string) {
     return updatedAssistant;
 }
 
-export async function useAssistant(assistantId: string, promptName: PromptName, content: string): Promise<string> {
+export async function useAssistant(promptName: PromptName, content: string): Promise<string> {
+    const assistantId = await initializeAssistant();
     console.log(`Using assistant ${assistantId}...`);
     
-    const thread = await makeRequest('/threads', 'POST');
-    console.log("Thread created:", JSON.stringify(thread, null, 2));
+    const cacheKey = `${promptName}:${content}`;
+    let threadId = threadCache.get(cacheKey);
+    
+    if (!threadId) {
+        const thread = await makeRequest('/threads', 'POST');
+        threadId = thread.id;
+        threadCache.set(cacheKey, threadId);
+        console.log("Thread created:", JSON.stringify(thread, null, 2));
+    } else {
+        console.log("Using cached thread:", threadId);
+    }
 
     const combinedContent = `${prompts[promptName].content}\n\nUser Content: ${content}`;
     console.log('Combined content:', combinedContent);
 
-    const message = await makeRequest(`/threads/${thread.id}/messages`, 'POST', {
+    const message = await makeRequest(`/threads/${threadId}/messages`, 'POST', {
         role: "user",
         content: combinedContent
     });
@@ -67,7 +81,7 @@ export async function useAssistant(assistantId: string, promptName: PromptName, 
 
     const runBody = { assistant_id: assistantId };
     console.log('Run creation request body:', JSON.stringify(runBody, null, 2));
-    const run = await makeRequest(`/threads/${thread.id}/runs`, 'POST', runBody);
+    const run = await makeRequest(`/threads/${threadId}/runs`, 'POST', runBody);
     console.log("Run created:", JSON.stringify(run, null, 2));
 
     let runStatus;
@@ -77,7 +91,7 @@ export async function useAssistant(assistantId: string, promptName: PromptName, 
 
     while (retryCount < maxRetries) {
         await new Promise(resolve => setTimeout(resolve, delay));
-        runStatus = await makeRequest(`/threads/${thread.id}/runs/${run.id}`);
+        runStatus = await makeRequest(`/threads/${threadId}/runs/${run.id}`);
         console.log("Run status:", JSON.stringify(runStatus, null, 2));
         
         if (runStatus.status === 'completed') {
@@ -97,18 +111,24 @@ export async function useAssistant(assistantId: string, promptName: PromptName, 
         throw new Error("Maximum retries reached. Operation timed out.");
     }
 
-    const messages = await makeRequest(`/threads/${thread.id}/messages`);
+    const messages = await makeRequest(`/threads/${threadId}/messages`);
     console.log("Retrieved messages:", JSON.stringify(messages, null, 2));
     return messages.data[0].content[0].text.value;
 }
 
 export async function initializeAssistant(): Promise<string> {
+    if (cachedAssistantId) {
+        console.log(`Using cached assistant: ${cachedAssistantId}`);
+        return cachedAssistantId;
+    }
+
     const assistants = await listAssistants();
     if (assistants.length > 0) {
         const firstAssistant = assistants[0];
         console.log(`Using the first assistant: ${firstAssistant.id}`);
         const updatedAssistant = await updateAssistant(firstAssistant.id);
-        return updatedAssistant.id;
+        cachedAssistantId = updatedAssistant.id;
+        return cachedAssistantId;
     } else {
         console.error("No assistants found.");
         throw new Error("No assistants found.");

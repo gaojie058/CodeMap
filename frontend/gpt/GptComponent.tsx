@@ -25,9 +25,7 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
     try {
       setLoading(true);
       setError(null);
-      const assistantId = await initializeAssistant();
-      const { promptName } = queryDefinitions[queryType];
-      const result = await useAssistant(assistantId, promptName, content);
+      const result = await useAssistant(queryDefinitions[queryType].promptName, content);
       setResponse(result);
       if (onResponseReceived) {
         onResponseReceived(result);
