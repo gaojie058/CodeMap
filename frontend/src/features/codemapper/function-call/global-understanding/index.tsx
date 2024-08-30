@@ -5,10 +5,8 @@ import useStore from '@/store/store';
 
 const understandings = [
   { name: 'Overview', key: 'Overview' },
-  { name: 'Inheritance Relationship', key: 'Inheritance Relationship' },
-  { name: 'Parent Class', key: 'Parent Class' },
-  { name: 'Child Class', key: 'Child Class' },
-  { name: 'Significance of Relationship', key: 'Significance of Relationship' },
+  { name: 'Modules', key: 'Modules' },
+  { name: 'Relationships', key: 'Relationships' },
 ];
 
 function extractJsonFromText(responseText: string) {
@@ -34,14 +32,24 @@ const FnGlobalUnderstanding: React.FC = () => {
     }
   };
 
-  const formatValue = (value: any): string => {
-    if (typeof value === 'string') return value;
-    if (typeof value === 'object') {
-      return Object.entries(value)
-        .map(([key, val]) => `${key}: ${val}`)
-        .join('\n');
+  const formatValue = (value: any, key: string): string => {
+    if (key === 'Overview' || key === 'Relationships') {
+      return Array.isArray(value) ? value.join('\n\n') : value;
     }
-    return JSON.stringify(value);
+    if (key === 'Modules') {
+      return value.map((module: any) => `
+${module.name}
+${'='.repeat(module.name.length)}
+
+${module.description}
+
+Files:
+${module.files.map((file: any) => `
+- ${file.name}
+  ${file.description.replace(/\n/g, '\n  ')}`).join('\n')}
+`).join('\n\n-----------------------------------------\n\n');
+    }
+    return JSON.stringify(value, null, 2);
   };
 
   return (
@@ -52,7 +60,7 @@ const FnGlobalUnderstanding: React.FC = () => {
           item={{
             name: item.name,
             key: item.key,
-            value: fnGlobalUnderstanding ? formatValue(fnGlobalUnderstanding[item.key]) : null
+            value: fnGlobalUnderstanding ? formatValue(fnGlobalUnderstanding[item.key], item.key) : null
           }}
         />
       ))}

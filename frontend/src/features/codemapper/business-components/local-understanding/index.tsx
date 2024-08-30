@@ -1,142 +1,141 @@
-// src/components/FnGlobalUnderstanding/index.tsx
-
-import React from 'react';
-import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
-import { GptComponent } from '@gpt/GptComponent';
+import React, { useEffect, useState } from 'react';
 import useStore from '@/store/store';
-import { LocalGraph } from '../../graph';
+import { GptComponent } from '@gpt/GptComponent';
+import useToolbarStore from '@/store/toolbarStore';
+import { extractDotContent } from '@/utils/extractdot';
+import { AnalysisGraph, LocalGraph } from '../../graph';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { BaseDialog } from '@/components/Elements/Dialog/BaseDialog';
+import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
 
-const businessFlowUnderstandings = [
-  { name: 'Business Flow Overview', key: 'Business Flow Overview' },
-  { name: 'Role of the Highlighted Business Flow in the Overall Framework', key: 'Role of the Highlighted Business Flow in the Overall Framework' },
-  { name: 'Roles of Each Component Under This Business Flow', key: 'Roles of Each Component Under This Business Flow' },
-];
-
-const componentRelationUnderstandings = [
-  { name: 'Project Name', key: 'project_name' },
-  { name: 'Components', key: 'components' },
-  { name: 'Processes', key: 'processes' },
-  { name: 'Key Concepts', key: 'key_concepts' },
-  { name: 'Additional Notes', key: 'additional_notes' },
-];
-
-function extractJsonFromText(responseText: string) {
-  const jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
-  if (jsonMatch && jsonMatch[1]) {
-    try {
-      return JSON.parse(jsonMatch[1]);
-    } catch (error) {
-      console.error('Failed to parse JSON:', error);
-    }
+function parseJsonResponse(response: string | null) {
+  if (!response) return null;
+  try {
+    // 尝试提取 ```json ``` 标记中的内容
+    const jsonMatch = response.match(/```json\n([\s\S]*?)\n```/);
+    const jsonString = jsonMatch ? jsonMatch[1] : response;
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error('Failed to parse JSON response:', error);
+    return null;
   }
-  console.error('No valid JSON found in the response');
-  return null;
 }
 
-const FnGlobalUnderstanding: React.FC = () => {
-  const { 
-    bizCompLocalDOT, setBizCompLocalDOT,
-    businessFlowAnalysis, setBusinessFlowAnalysis, 
-    componentRelationAnalysis, setComponentRelationAnalysis 
-  } = useStore();
+const BizLocalUnderstanding: React.FC = () => {
+  const [isMiniGraphOpen, setIsMiniGraphOpen] = useState<boolean>(false);
+  const [isHighlightedExpOpen, setIsHighlightedExpOpen] = useState<boolean>(false);
+  const [isRelevantExpOpen, setIsRelevantExpOpen] = useState<boolean>(false);
 
-  const handleBusinessLocalGraphResponse = (res: string | null) => {
-    if (res) {
-      setBizCompLocalDOT(res);
-    }
-  };
+  const { selectedNode } = useToolbarStore();
+  const { bizCompLocalDOT, setBizCompLocalDOT } = useStore();
 
-  const handleBusinessFlowResponse = (res: string | null) => {
-    if (res) {
-      const jsonData = extractJsonFromText(res);
-      setBusinessFlowAnalysis(jsonData);
-    }
-  };
+  const [gptResponseBizLocalGraph, setGptResponseBizLocalGraph] = useState<string | null>(null);
+  const [gptResHighlightedBizFlow, setGptResHighlightedBizFlow] = useState<any>(null);
+  const [gptResRelevantBizFlow, setGptResRelevantBizFlow] = useState<any>(null);
 
-  const handleComponentRelationResponse = (res: string | null) => {
-    if (res) {
-      const jsonData = extractJsonFromText(res);
-      setComponentRelationAnalysis(jsonData);
-    }
-  };
+  const handleResBizLocalGraph = (res: string | null) => setGptResponseBizLocalGraph(res);
+  const handleResHighlightedBizFlow = (res: string | null) => setGptResHighlightedBizFlow(parseJsonResponse(res));
+  const handleResRelevantBizFlow = (res: string | null) => setGptResRelevantBizFlow(parseJsonResponse(res));
 
-  const formatValue = (value: any): string => {
-    if (typeof value === 'string') return value;
-    if (Array.isArray(value)) {
-      return value.map((item, index) => {
-        if (typeof item === 'object') {
-          return Object.entries(item)
-            .map(([key, val]) => `${key}: ${val}`)
-            .join('\n');
-        }
-        return `${index + 1}. ${item}`;
-      }).join('\n');
-    }
-    if (typeof value === 'object') {
-      return Object.entries(value)
-        .map(([key, val]) => `${key}: ${val}`)
-        .join('\n');
-    }
-    return JSON.stringify(value);
+  useEffect(() => {
+    if (gptResponseBizLocalGraph) setBizCompLocalDOT(extractDotContent(gptResponseBizLocalGraph));
+  }, [gptResponseBizLocalGraph]);
+
+  const renderDisclosureItems = (data: any) => {
+    if (!data) return null;
+    return Object.entries(data).map(([key, value], index) => (
+      <DisclosureItem
+        key={index}
+        item={{
+          name: key,
+          key: key,
+          value: typeof value === 'object' ? JSON.stringify(value, null, 2) : value as string
+        }}
+      />
+    ));
   };
 
   return (
-    <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
-      <h2>Business Local Graph</h2>
-      {bizCompLocalDOT && (
-        <LocalGraph
-          dot={bizCompLocalDOT}
-          onExpand={() => {}}
-          onRegenerate={() => {}}
-        />
-      )}
+    <>
+      <div className='h-screen w-full'>
+        <div className='mx-auto w-full max-w-lg flex flex-col gap-4 rounded-xl'>
+          <LocalGraph
+            dot={bizCompLocalDOT}
+            onExpand={() => setIsMiniGraphOpen(true)}
+            onRegenerate={() => {}}
+          />
 
-      <h2>Business Flow Analysis</h2>
-      {businessFlowUnderstandings.map((item) => (
-        <DisclosureItem 
-          key={item.key}
-          item={{
-            name: item.name,
-            key: item.key,
-            value: businessFlowAnalysis ? formatValue(businessFlowAnalysis[item.key]) : null
-          }}
-        />
-      ))}
+          <div className='my-2 flex flex-col gap-4'>
+            <div>
+              <button
+                type='button'
+                onClick={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
+                className='w-full px-6 py-2.5 border border-zinc-200 rounded-lg flex justify-between items-center font-medium text-sm'
+              >
+                Explain the highlighted business flow
+                <ChevronDownIcon
+                  className={`size-4 fill-white/60 ${
+                    isHighlightedExpOpen ? 'rotate-180' : 'group-data-[hover]:fill-white/50'
+                  }`}
+                />
+              </button>
+              <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
+                {isHighlightedExpOpen && renderDisclosureItems(gptResHighlightedBizFlow)}
+              </div>
+            </div>
+            <div>
+              <button
+                type='button'
+                onClick={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
+                className='w-full px-6 py-2.5 border border-zinc-200 rounded-lg flex justify-between items-center font-medium text-sm'
+              >
+                Relevant business flow
+                <ChevronDownIcon
+                  className={`size-4 fill-white/60 ${
+                    isRelevantExpOpen ? 'rotate-180' : 'group-data-[hover]:fill-white/50'
+                  }`}
+                />
+              </button>
+              <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
+                {isRelevantExpOpen && renderDisclosureItems(gptResRelevantBizFlow)}
+              </div>
+            </div>
+          </div>
 
-      <h2>Component Relation Analysis</h2>
-      {componentRelationUnderstandings.map((item) => (
-        <DisclosureItem 
-          key={item.key}
-          item={{
-            name: item.name,
-            key: item.key,
-            value: componentRelationAnalysis ? formatValue(componentRelationAnalysis[item.key]) : null
-          }}
-        />
-      ))}
+          {selectedNode && !bizCompLocalDOT && (
+            <GptComponent
+              queryType='P3_R3_businessLocalGraph'
+              params={{ selectedNode }}
+              onResponseReceived={handleResBizLocalGraph}
+            />
+          )}
 
-      {!bizCompLocalDOT && (
-        <GptComponent
-          queryType='P3_R3_businessLocalGraph'
-          onResponseReceived={handleBusinessLocalGraphResponse}
-        />
-      )}
+          {selectedNode && !gptResHighlightedBizFlow && (
+            <GptComponent
+              queryType='P4_R4_businessFlowAnalysis'
+              params={{ selectedNode }}
+              onResponseReceived={handleResHighlightedBizFlow}
+            />
+          )}
 
-      {!businessFlowAnalysis && (
-        <GptComponent
-          queryType='P4_R4_businessFlowAnalysis'
-          onResponseReceived={handleBusinessFlowResponse}
-        />
-      )}
+          {selectedNode && !gptResRelevantBizFlow && (
+            <GptComponent
+              queryType='P5_R5_componentRelationAnalysis'
+              params={{ selectedNode }}
+              onResponseReceived={handleResRelevantBizFlow}
+            />
+          )}
+        </div>
+      </div>
 
-      {!componentRelationAnalysis && (
-        <GptComponent
-          queryType='P5_R5_componentRelationAnalysis'
-          onResponseReceived={handleComponentRelationResponse}
-        />
-      )}
-    </div>
+      <BaseDialog
+        isOpen={isMiniGraphOpen}
+        onClose={() => setIsMiniGraphOpen(!isMiniGraphOpen)}
+      >
+        <AnalysisGraph dotData={bizCompLocalDOT} />
+      </BaseDialog>
+    </>
   );
 };
 
-export default FnGlobalUnderstanding;
+export default BizLocalUnderstanding;
