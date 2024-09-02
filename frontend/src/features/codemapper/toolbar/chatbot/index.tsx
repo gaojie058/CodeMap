@@ -1,9 +1,14 @@
+// frontend/src/features/codemapper/toolbar/chatbot/index.tsx
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import './style/chatbot.style.css';
 import OpenAI from '@/assets/icons/openai.svg';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { UserCircleIcon } from '@heroicons/react/16/solid';
 import IconButton from '@/components/Elements/Button/IconButton';
+import chatService from '@gpt/chatService';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -14,19 +19,11 @@ interface ChatWindowProps {
   toggleChatbotContainer: () => void;
 }
 
-/**
- * ChatWindow Component
- *
- * This is the main chat function component. Any modifications or updates
- * to the chat functionality should be made within this component.
- *
- */
 const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
   const initialMessage: ChatMessage[] = [
     {
       role: 'assistant',
-      content:
-        'Type your question here, what further details you want to understand?',
+      content: 'Type your question here, what further details you want to understand?',
     },
   ];
 
@@ -34,35 +31,40 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
   const [chats, setChats] = useState<ChatMessage[]>(initialMessage);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
+  useEffect(() => {
+    chatService.initializeThread();
+  }, []);
+
   const chat = async (e: FormEvent<HTMLFormElement>, message: string) => {
     e.preventDefault();
-
+  
     if (!message) return;
-
+  
     setIsTyping(true);
-
+  
     const newChats: ChatMessage[] = [
       ...chats,
       { role: 'user', content: message },
     ];
     setChats(newChats);
     setMessage('');
-
-    // TODO: replace GptComponent
+  
     try {
-      const fetchDataFromGPT = async (): Promise<ChatMessage> => {
-        return {
-          role: 'assistant',
-          content: 'response from gpt',
-        };
-      };
-      const response = await fetchDataFromGPT();
-
-      const botMessage: ChatMessage = response;
-      setChats([...newChats, botMessage]);
-      setIsTyping(false);
+      await chatService.sendMessage(message, (content) => {
+        setChats(prevChats => {
+          const updatedChats = [...prevChats];
+          if (updatedChats[updatedChats.length - 1].role === 'assistant') {
+            updatedChats[updatedChats.length - 1].content = content;
+          } else {
+            updatedChats.push({ role: 'assistant', content });
+          }
+          return updatedChats;
+        });
+      });
     } catch (error) {
       console.error(error);
+      // 可以在这里添加错误处理逻辑，比如显示错误消息
+    } finally {
       setIsTyping(false);
     }
   };
@@ -81,6 +83,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
             message={message}
             setMessage={setMessage}
             onSubmit={(e) => chat(e, message)}
+            isTyping={isTyping}
           />
         </main>
       </div>
@@ -88,14 +91,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
   );
 };
 
-/**
- * Chatbot Component
- *
- * This component serves as the main container for the chatbot interface.
- * It renders the Chatbot Toggle Button, which allows users to show or
- * hide the chatbot, and manages the display of the ChatWindow component.
- *
- */
 export const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -127,13 +122,14 @@ export const Chatbot: React.FC = () => {
 interface ChatHistoryProps {
   chats: ChatMessage[];
 }
+
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chats }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   if (chats.length > 1)
-  //     chatContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
-  // }, [chats]);
+  useEffect(() => {
+    if (chats.length > 1)
+      chatContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chats]);
 
   return (
     <>
@@ -148,12 +144,16 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chats }) => {
                     : 'flex-row-reverse mr-[25%]'
                 }`}
               >
-                <p
-                  className={`bg-gray-100 p-2.5 rounded-md text-gray-800 text-sm flex-1`}
-                  style={{ wordBreak: 'break-word' }}
+                <div
+                  className={`bg-gray-100 p-2.5 rounded-md text-gray-800 text-sm flex-1 markdown-content`}
                 >
-                  {chat.content}
-                </p>
+                  <ReactMarkdown 
+                    rehypePlugins={[rehypeRaw]} 
+                    remarkPlugins={[remarkGfm]}
+                  >
+                    {chat.content}
+                  </ReactMarkdown>
+                </div>
                 {chat.role === 'user' ? (
                   <div className='h-8 w-8 mx-2'>
                     <UserCircleIcon />
@@ -175,17 +175,18 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chats }) => {
     </>
   );
 };
-
 interface MessageInputProps {
   message: string;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  isTyping: boolean;
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
   message,
   setMessage,
   onSubmit,
+  isTyping,
 }) => {
   return (
     <form
@@ -201,13 +202,17 @@ const MessageInput: React.FC<MessageInputProps> = ({
         placeholder='Type your message here'
         required
         onChange={(e) => setMessage(e.target.value)}
+        disabled={isTyping}
       />
       <button
         type='submit'
         className='bg-black hover:bg-gray-800 text-white text-sm rounded-lg px-4 py-2.5'
+        disabled={isTyping}
       >
-        Send
+        {isTyping ? 'Typing...' : 'Send'}
       </button>
     </form>
   );
 };
+
+export default Chatbot;
