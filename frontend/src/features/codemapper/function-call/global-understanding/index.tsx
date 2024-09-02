@@ -10,16 +10,27 @@ const understandings = [
 ];
 
 function extractJsonFromText(responseText: string) {
-  const jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
-  if (jsonMatch && jsonMatch[1]) {
+  const jsonPattern = /```json\s*(\{[\s\S]*?\})\s*```/;
+  const match = responseText.match(jsonPattern);
+
+  if (match) {
+    const jsonStr = match[1]
     try {
-      return JSON.parse(jsonMatch[1]);
+      const jsonData = JSON.parse(jsonStr);
+      understandings.forEach(item => {
+        if (Object.prototype.hasOwnProperty.call(jsonData, item.key)) {
+          item.value = JSON.stringify(jsonData[item.key]);
+        }
+      })
+      return jsonData;
     } catch (error) {
       console.error('Failed to parse JSON:', error);
+      return null;
     }
+  } else {
+    console.warn('No JSON found in the response text');
+    return null;
   }
-  console.error('No valid JSON found in the response');
-  return null;
 }
 
 const FnGlobalUnderstanding: React.FC = () => {
@@ -33,37 +44,10 @@ const FnGlobalUnderstanding: React.FC = () => {
     }
   };
 
-  const formatValue = (value: any, key: string): string => {
-    if (key === 'Overview' || key === 'Relationships') {
-      return Array.isArray(value) ? value.map(item => `• ${item}`).join('\n\n') : value;
-    }
-    if (key === 'Modules') {
-      return value.map((module: any) => `
-  • ${module.name}
-  
-    ${module.description}
-  
-    Files:
-  ${module.files.map((file: any) => `
-    • ${file.name}
-      
-      ${file.description.replace(/\n/g, '\n    ').replace(/(.{80})/g, "$1\n    ")}`).join('\n')}
-  `).join('\n');
-    }
-    return JSON.stringify(value, null, 2);
-  };
-
   return (
     <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
-      {understandings.map((item) => (
-        <DisclosureItem
-          key={item.key}
-          item={{
-            name: item.name,
-            key: item.key,
-            value: fnGlobalUnderstanding ? formatValue(fnGlobalUnderstanding[item.key], item.key) : null
-          }}
-        />
+      {!!understandings[0].value && understandings.map((item, index) => (
+        <DisclosureItem item={item} key={`func-global-${index}`} />
       ))}
 
       {!fnGlobalUnderstanding && (
