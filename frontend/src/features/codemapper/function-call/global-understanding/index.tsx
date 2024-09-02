@@ -28,25 +28,27 @@ const FnGlobalUnderstanding: React.FC = () => {
   const handleResponse = (res: string | null) => {
     if (res) {
       const jsonData = extractJsonFromText(res);
+      console.log('Global understanding:', jsonData);
       setFnGlobalUnderstanding(jsonData);
     }
   };
 
   const formatValue = (value: any, key: string): string => {
     if (key === 'Overview' || key === 'Relationships') {
-      return Array.isArray(value) ? value.map(item => `• ${item}`).join('\n') : value;
+      return Array.isArray(value) ? value.map(item => `• ${item}`).join('\n\n') : value;
     }
     if (key === 'Modules') {
       return value.map((module: any) => `
-• ${module.name}
-
-  ${module.description}
-
-  Files:
-${module.files.map((file: any) => `
-  • ${file.name}
-    ${file.description.replace(/\n/g, '\n    ')}`).join('')}
-`).join('\n');
+  • ${module.name}
+  
+    ${module.description}
+  
+    Files:
+  ${module.files.map((file: any) => `
+    • ${file.name}
+      
+      ${file.description.replace(/\n/g, '\n    ').replace(/(.{80})/g, "$1\n    ")}`).join('\n')}
+  `).join('\n');
     }
     return JSON.stringify(value, null, 2);
   };
