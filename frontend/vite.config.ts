@@ -11,9 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": "/src",
-      '@gpt': resolve(__dirname, 'gpt'),
-      "node-fetch" : "node-fetch/lib/index.js",
-      "stream" : "stream-browserify"
+      '@gpt': resolve(__dirname, 'gpt')
     },
   },
 })

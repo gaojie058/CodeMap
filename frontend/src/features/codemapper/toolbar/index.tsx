@@ -6,6 +6,7 @@ import BizLocalUnderstanding from '../business-components/local-understanding';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/react';
 import BizGlobalUnderstanding from '../business-components/global-understanding';
 import useToolbarStore from '@/store/toolbarStore';
+import { Chatbot } from './chatbot';
 
 type UnderstandingType = 'BUSINESS' | 'FUNCTION_CALL';
 
@@ -67,6 +68,9 @@ const Toolbar: React.FC<ToolbarProps> = ({ isOpen, onClose, type }) => {
             </article>
           </div>
         </TabGroup>
+        <div className='absolute bottom-16 right-8'>
+          <Chatbot />
+        </div>
       </Slideover>
     </>
   );
