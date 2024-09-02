@@ -46,7 +46,7 @@ const FnGlobalUnderstanding: React.FC = () => {
 
   return (
     <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
-      {!!understandings[0].value && understandings.map((item, index) => (
+      {understandings.map((item, index) => (
         <DisclosureItem item={item} key={`func-global-${index}`} />
       ))}
 
