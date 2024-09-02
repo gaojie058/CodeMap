@@ -34,20 +34,19 @@ const FnGlobalUnderstanding: React.FC = () => {
 
   const formatValue = (value: any, key: string): string => {
     if (key === 'Overview' || key === 'Relationships') {
-      return Array.isArray(value) ? value.join('\n\n') : value;
+      return Array.isArray(value) ? value.map(item => `• ${item}`).join('\n') : value;
     }
     if (key === 'Modules') {
       return value.map((module: any) => `
-${module.name}
-${'='.repeat(module.name.length)}
+• ${module.name}
 
-${module.description}
+  ${module.description}
 
-Files:
+  Files:
 ${module.files.map((file: any) => `
-- ${file.name}
-  ${file.description.replace(/\n/g, '\n  ')}`).join('\n')}
-`).join('\n\n-----------------------------------------\n\n');
+  • ${file.name}
+    ${file.description.replace(/\n/g, '\n    ')}`).join('')}
+`).join('\n');
     }
     return JSON.stringify(value, null, 2);
   };
