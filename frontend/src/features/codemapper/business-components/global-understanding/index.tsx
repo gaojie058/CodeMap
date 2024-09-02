@@ -45,7 +45,6 @@ const understandings = [
 
 // fix
 function extractJsonFromText(responseText: string) {
-  console.log("=============================projectAnalysisJson===============", responseText)
   const jsonPattern = /```json\s*(\{[\s\S]*?\})\s*```/;
   const match = responseText.match(jsonPattern);
 
@@ -58,7 +57,6 @@ function extractJsonFromText(responseText: string) {
           item.value = JSON.stringify(jsonData[item.key]);
         }
       })
-      console.log("=============================projectAnalysisJson jsonData===============", jsonData)
       return jsonData;
     } catch (error) {
       console.error('Failed to parse JSON:', error);
