@@ -4,9 +4,9 @@ import { GptComponent } from '@gpt/GptComponent';
 import useStore from '@/store/store';
 
 const understandings = [
-  { name: 'Overview', key: 'Overview' },
-  { name: 'Modules', key: 'Modules' },
-  { name: 'Relationships', key: 'Relationships' },
+  { name: 'Overview', key: 'Overview', value: '' },
+  { name: 'Modules', key: 'Modules', value: '' },
+  { name: 'Relationships', key: 'Relationships', value: '' },
 ];
 
 function extractJsonFromText(responseText: string) {
@@ -55,7 +55,7 @@ ${module.files.map((file: any) => `
   return (
     <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
       {understandings.map((item) => (
-        <DisclosureItem 
+        <DisclosureItem
           key={item.key}
           item={{
             name: item.name,
