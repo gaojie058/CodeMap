@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useStore from '@/store/store';
 import { GptComponent } from '@gpt/GptComponent';
 import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
+import Spinner from '@/components/Elements/Spinner/Spinner';
 
 // defines `understandings` that will be rendered as collapsible items
 // TODO: add data from `GptComponent`
@@ -74,10 +75,12 @@ function extractJsonFromText(responseText: string) {
  */
 const BizGlobalUnderstanding: React.FC = () => {
   const [gptResponse, setGptResponse] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { bizGlobalUnderstanding, setBizGlobalUnderstanding } = useStore();
 
   const handleResponse = (res: string | null) => setGptResponse(res);
+  const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
 
   useEffect(() => {
     if (gptResponse) {
@@ -88,15 +91,21 @@ const BizGlobalUnderstanding: React.FC = () => {
   return (
     <>
       <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
-        {!!understandings[0].value && understandings.map((item, index) => (
-          <DisclosureItem item={item} key={`biz-global-${index}`} />
-        ))}
+        {isLoading ? (
+          <Spinner loadingText='Loading Project Overview...' />
+        ) : (
+          understandings[0].value &&
+          understandings.map((item, index) => (
+            <DisclosureItem item={item} key={`biz-global-${index}`} />
+          ))
+        )}
 
         {/* Need to parse data into disclosure items above */}
         {!bizGlobalUnderstanding && (
           <GptComponent
             queryType='P1_R1_projectAnalysisJson'
             onResponseReceived={handleResponse}
+            onLoadingChange={handleLoadingChange}
           />
         )}
       </div>

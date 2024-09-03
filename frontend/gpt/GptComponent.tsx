@@ -8,9 +8,10 @@ interface GptComponentProps {
   queryType: QueryType;
   params?: Record<string, string>;
   onResponseReceived?: (response: string | null) => void;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
-export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType, params = {}, onResponseReceived }) => {
+export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType, params = {}, onResponseReceived, onLoadingChange }) => {
   const [response, setResponse] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,9 +22,10 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
   // 使用 useCallback 缓存 fetchData 函数
   const fetchData = useCallback(async () => {
     if (loading) return; // 防止重复请求
-    
+
     try {
       setLoading(true);
+      if (onLoadingChange) onLoadingChange(true);
       setError(null);
       const result = await useAssistant(queryDefinitions[queryType].promptName, content);
       setResponse(result);
@@ -34,8 +36,9 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
+      if (onLoadingChange) onLoadingChange(loading);
     }
-  }, [queryType, content, onResponseReceived]);
+  }, [queryType, content, onResponseReceived, onLoadingChange]);
 
   // 使用 useEffect 触发数据获取
   useEffect(() => {

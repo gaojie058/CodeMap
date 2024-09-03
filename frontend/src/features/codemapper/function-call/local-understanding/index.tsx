@@ -7,6 +7,7 @@ import { AnalysisGraph, LocalGraph } from '../../graph';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { BaseDialog } from '@/components/Elements/Dialog/BaseDialog';
 import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
+import DisclosureSection from '@/components/DisclosureSection/DisclosureSection';
 
 function extractJsonFromText(responseText: string) {
   const jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
@@ -27,12 +28,26 @@ const FnLocalUnderstanding: React.FC = () => {
   const [isRelevantExpOpen, setIsRelevantExpOpen] = useState<boolean>(false);
 
   const { selectedNode } = useToolbarStore();
-  const { fnCallLocalDOT, setFnCallLocalDOT } = useStore();
+  const {
+    fnCallLocalDOT,
+    setFnCallLocalDOT,
+    fnCallLocalHighlightFlow,
+    setFnCallLocalHighlightFlow,
+    fnCallLocalRelevantFlow,
+    setFnCallLocalRelevantFlow,
+  } = useStore();
 
+  // gpt responses
   const [gptResFnCallLocalGraph, setGptResFnCallLocalGraph] = useState<string | null>(null);
   const [gptResHighlightedFnCallFlow, setGptResHighlightedFnCallFlow] = useState<any>(null);
   const [gptResRelevantFnCallFlow, setGptResRelevantFnCallFlow] = useState<any>(null);
 
+  // loading states
+  const [isLocalmapLoading, setIsLocalmapLoading] = useState<boolean>(false);
+  const [isHighlightedExpLoading, setIsHighlightedExpLoading] = useState<boolean>(false);
+  const [isRelevantExpLoading, setIsRelevantExpLoading] = useState<boolean>(false);
+
+  // gpt response handlers
   const handleResFnCallLocalGraph = (res: string | null) => setGptResFnCallLocalGraph(res);
   const handleResHighlightedFnCallFlow = (res: string | null) => {
     const jsonData = extractJsonFromText(res);
@@ -43,11 +58,39 @@ const FnLocalUnderstanding: React.FC = () => {
     setGptResRelevantFnCallFlow(jsonData?.relevantInheritance || null);
   };
 
+    // gpt loading status handlers
+    const handleLocalMapLoadingChange = (loading: boolean) => setIsLocalmapLoading(loading);
+    const handleHighlightedExpLoadingChange = (loading: boolean) => setIsHighlightedExpLoading(loading);
+    const handleRelevantExpLoadingChange = (loading: boolean) => setIsRelevantExpLoading(loading);
+
+  // update global store
   useEffect(() => {
-    if (gptResFnCallLocalGraph) {
-      setFnCallLocalDOT(extractDotContent(gptResFnCallLocalGraph));
+    const updateStates = () => {
+      if (gptResFnCallLocalGraph) {
+        setFnCallLocalDOT(extractDotContent(gptResFnCallLocalGraph));
+      }
+
+      if (gptResHighlightedFnCallFlow) {
+        setFnCallLocalHighlightFlow(gptResHighlightedFnCallFlow);
+      }
+
+      if (gptResRelevantFnCallFlow) {
+        setFnCallLocalRelevantFlow(gptResRelevantFnCallFlow);
+      }
+    };
+    updateStates();
+  }, [
+    gptResFnCallLocalGraph,
+    gptResHighlightedFnCallFlow,
+    gptResRelevantFnCallFlow,
+  ]);
+
+  useEffect(() => {
+    if (selectedNode) {
+      setIsHighlightedExpOpen(true);
+      setIsRelevantExpOpen(true);
     }
-  }, [gptResFnCallLocalGraph]);
+  }, [selectedNode]);
 
   const renderDisclosureItems = (items: any[]) => {
     if (!items) return null;
@@ -72,43 +115,27 @@ const FnLocalUnderstanding: React.FC = () => {
           dot={fnCallLocalDOT}
           onExpand={() => setIsMiniGraphOpen(true)}
           onRegenerate={() => {}}
+          isLoading={isLocalmapLoading}
         />
 
         <div className='my-2 flex flex-col gap-4'>
-          <div>
-            <button
-              type='button'
-              onClick={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
-              className='w-full px-6 py-2.5 border border-zinc-200 rounded-lg flex justify-between items-center font-medium text-sm'
-            >
-              Explain the highlighted inheritance flow
-              <ChevronDownIcon
-                className={`size-4 fill-white/60 ${
-                  isHighlightedExpOpen ? 'rotate-180' : 'group-data-[hover]:fill-white/50'
-                }`}
-              />
-            </button>
-            <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
-              {isHighlightedExpOpen && renderDisclosureItems(gptResHighlightedFnCallFlow)}
-            </div>
-          </div>
-          <div>
-            <button
-              type='button'
-              onClick={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
-              className='w-full px-6 py-2.5 border border-zinc-200 rounded-lg flex justify-between items-center font-medium text-sm'
-            >
-              Relevant inheritance flow
-              <ChevronDownIcon
-                className={`size-4 fill-white/60 ${
-                  isRelevantExpOpen ? 'rotate-180' : 'group-data-[hover]:fill-white/50'
-                }`}
-              />
-            </button>
-            <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
-              {isRelevantExpOpen && renderDisclosureItems(gptResRelevantFnCallFlow)}
-            </div>
-          </div>
+          <DisclosureSection
+            title='Explain the highlighted inheritance flow'
+            isOpen={isHighlightedExpOpen}
+            disabled={!selectedNode}
+            isLoading={isHighlightedExpLoading}
+            onToggle={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
+            content={renderDisclosureItems(fnCallLocalHighlightFlow)}
+          />
+
+          <DisclosureSection
+            title='Relevant inheritance flow'
+            isOpen={isRelevantExpOpen}
+            disabled={!selectedNode}
+            isLoading={isRelevantExpLoading}
+            onToggle={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
+            content={renderDisclosureItems(fnCallLocalRelevantFlow)}
+          />
         </div>
 
         {selectedNode && !fnCallLocalDOT && (
@@ -116,6 +143,7 @@ const FnLocalUnderstanding: React.FC = () => {
             queryType='P9_R9_functionCallFlow'
             params={{ selectedNode }}
             onResponseReceived={handleResFnCallLocalGraph}
+            onLoadingChange={handleLocalMapLoadingChange}
           />
         )}
 
@@ -124,6 +152,7 @@ const FnLocalUnderstanding: React.FC = () => {
             queryType='P8_R8_functionCallLocalDesc'
             params={{ selectedNode }}
             onResponseReceived={handleResHighlightedFnCallFlow}
+            onLoadingChange={handleHighlightedExpLoadingChange}
           />
         )}
 
@@ -132,6 +161,7 @@ const FnLocalUnderstanding: React.FC = () => {
             queryType='P10_R10_functionCallLocalExplain'
             params={{ selectedNode }}
             onResponseReceived={handleResRelevantFnCallFlow}
+            onLoadingChange={handleRelevantExpLoadingChange}
           />
         )}
       </div>

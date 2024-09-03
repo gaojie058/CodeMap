@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { graphviz } from 'd3-graphviz';
 import './style/graph.style.css';
+import { graphviz } from 'd3-graphviz';
 import useToolbarStore from '@/store/toolbarStore';
 import Button from '@/components/Elements/Button/Button';
 import IconButton from '@/components/Elements/Button/IconButton';
 import { ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
+import Spinner from '@/components/Elements/Spinner/Spinner';
 
 interface AnalysisGraphProps {
   dotData: string | null;
@@ -95,8 +96,9 @@ interface LocalGraph {
   dot: string | null;
   onExpand: () => void;
   onRegenerate: () => void;
+  isLoading?: boolean;
 }
-export const LocalGraph: React.FC<LocalGraph> = ({ dot, onExpand, onRegenerate }) => {
+export const LocalGraph: React.FC<LocalGraph> = ({ dot, onExpand, onRegenerate, isLoading }) => {
   return (
     <div className='w-full h-64 border border-gray-200 rounded-lg relative flex items-center justify-center'>
       {dot ? (
@@ -108,6 +110,8 @@ export const LocalGraph: React.FC<LocalGraph> = ({ dot, onExpand, onRegenerate }
             className='absolute top-0 right-0 mt-2 mr-2'
           />
         </>
+      ) : isLoading ? (
+          <Spinner loadingText='Loading localmap...' />
       ) : (
         <span className='text-xs font-medium text-zinc-500'>
           Select a node to check its detailed map.
