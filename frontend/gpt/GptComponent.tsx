@@ -67,7 +67,7 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
     return null;
   }, [error, loading, response, queryType]);
 
-  return renderContent;
+  return <div className='hidden'>{renderContent}</div>;
 });
 
 // 添加显示名称，有助于调试

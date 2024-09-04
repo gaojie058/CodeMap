@@ -92,7 +92,7 @@ const BizGlobalUnderstanding: React.FC = () => {
     <>
       <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
         {isLoading ? (
-          <Spinner loadingText='Loading Project Overview...' />
+          <Spinner loadingText='Loading Project Overview...' className='mt-24'/>
         ) : (
           understandings[0].value &&
           understandings.map((item, index) => (

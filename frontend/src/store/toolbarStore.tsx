@@ -13,7 +13,7 @@ interface State {
   setSelectedEdge: (edge: string) => void;
 }
 const useToolbarStore = create<State>((set) => ({
-  isToolbarOpen: false,
+  isToolbarOpen: true,
   setIsToolbarOpen: (isOpen) => set(({ isToolbarOpen: isOpen })),
   toggleToolbar: () => set((state) => ({ isToolbarOpen: !state.isToolbarOpen })),
 

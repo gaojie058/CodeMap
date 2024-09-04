@@ -18,8 +18,8 @@ const HeaderContainer = styled.div`
 export const Header: React.FC = () => {
   const navigate = useNavigate();
 
-  const navigateToBiz = () => navigate('/understand/business-comps');
-  const navigateToFn = () => navigate('/understand/function-call');
+  const navigateToBiz = () => navigate('/business-comps');
+  const navigateToFn = () => navigate('/function-call');
 
   const toggleToolbar = useToolbarStore((state) => state.toggleToolbar);
 
@@ -57,6 +57,7 @@ export const Header: React.FC = () => {
                 }
               />
             </Routes>
+            <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/>
           </div>
         </header>
       </HeaderContainer>
