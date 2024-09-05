@@ -1,0 +1,22 @@
+.chat-container {
+  position: fixed;
+  bottom: 5rem;
+  right: 1rem;
+  width: 600px;
+  height: 500px;
+  background: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translate(100%, 100%);
+  opacity: 0;
+  z-index: 1000;
+}
+
+.chat-container.open {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+.chat-container.closed {
+  transform: translate(100%, 100%);
+  opacity: 0;
+}
