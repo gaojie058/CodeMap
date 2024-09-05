@@ -55,7 +55,8 @@ async function updateAssistant(assistantId: string) {
 }
 
 export async function useAssistant(promptName: PromptName, content: string): Promise<string> {
-    const assistantId = await initializeAssistant();
+    const assistantId = "asst_dTXAcHRrR3oIQqrUIkzrgdvw"//task1
+    // const assistantId= "asst_cj2CTaMuDQxc7l4YA3UtZ3nX"//task2
     console.log(`Using assistant ${assistantId}...`);
     
     const cacheKey = `${promptName}:${content}`;
