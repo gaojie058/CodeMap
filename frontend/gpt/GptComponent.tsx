@@ -22,7 +22,7 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
   // 使用 useCallback 缓存 fetchData 函数
   const fetchData = useCallback(async () => {
     if (loading) return; // 防止重复请求
-
+    console.info('started');
     try {
       setLoading(true);
       if (onLoadingChange) onLoadingChange(true);

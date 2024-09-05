@@ -14,7 +14,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, label }) => {
         to={to}
         className={({ isActive }) =>
           clsx(`
-          flex items-center justify-center gap-2 w-full h-full p-4 rounded-lg select-none hover:bg-gray-100 hover:cursor-default text-sm font-medium
+          flex items-center justify-start gap-2 w-full h-full p-4 rounded-lg select-none hover:bg-gray-100 hover:cursor-default text-sm font-medium
           ${isActive && 'bg-black !text-white hover:!bg-black'}
         `)
         }

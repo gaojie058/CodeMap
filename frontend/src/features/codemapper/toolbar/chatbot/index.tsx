@@ -126,11 +126,6 @@ interface ChatHistoryProps {
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chats }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (chats.length > 1)
-      chatContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chats]);
-
   return (
     <>
       <section className='max-h-96 my-4 overflow-y-auto flex flex-col gap-2'>

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import TreeStructure from '/icons/Tree Structure.png';
-import Tree from '/icons/Tree.png';
 import CodeMapLogo from '/logo.svg';
+import CodeIcon from '@/assets/icons/code_white.png';
 
 /**
  * Renders the "Understanding" section of the application.
@@ -48,7 +48,7 @@ const CodeMapper = () => {
               <div className='px-6 py-8'>
                 <div className='flex items-center justify-center size-[42px] rounded-full bg-black mb-2'>
                   <img
-                    src={Tree}
+                    src={CodeIcon}
                     className='h-6 w-6'
                     alt='Tree Structure Icon'
                   />

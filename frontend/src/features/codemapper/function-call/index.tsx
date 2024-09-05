@@ -33,13 +33,11 @@ const FunctionCall: React.FC = () => {
 
   return (
     <>
-      <div className='font-semibold h1'>Function Call</div>
-
       <div className='w-full h-screen overflow-hidden'>
         {isLoading ? (
           <Spinner loadingText='Loading Global Map of the Codebase' />
         ) : (
-          fnCallDOT && <AnalysisGraph dotData={fnCallDOT} />
+          fnCallDOT && <div className='w-full h-screen overflow-hidden'><AnalysisGraph dotData={fnCallDOT} understanding='functioncall' /></div>
         )}
       </div>
 

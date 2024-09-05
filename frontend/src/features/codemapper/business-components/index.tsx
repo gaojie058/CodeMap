@@ -45,12 +45,10 @@ const BusinessComponents: React.FC = () => {
 
   return (
     <>
-      <div className='font-semibold h1'>Business Components</div>
-
       {isLoading ? (
         <Spinner loadingText='Loading Global Map of the Codebase' />
       ) : (
-        bizCompDOT && <AnalysisGraph dotData={bizCompDOT} />
+        bizCompDOT && <div className='w-full h-screen overflow-hidden'><AnalysisGraph dotData={bizCompDOT} understanding='businesscomponent' /></div>
       )}
 
       <Toolbar isOpen={isToolbarOpen} onClose={toggleToolbar} type='BUSINESS' />

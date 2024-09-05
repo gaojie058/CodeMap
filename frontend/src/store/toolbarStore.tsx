@@ -3,7 +3,9 @@ import { create } from 'zustand';
 interface State {
   // toolbar behaviour
   isToolbarOpen: boolean;
-  setIsToolbarOpen: (isOpen: boolean) => void;
+  toolbarContext: 'global' | 'local';
+  setToolbarContext: (context: 'global' | 'local') => void;
+  setIsToolbarOpen: (isOpen: boolean, context?: 'global' | 'local') => void;
   toggleToolbar: () => void;
 
   // toolbar `LocalUnderstanding` data
@@ -14,7 +16,9 @@ interface State {
 }
 const useToolbarStore = create<State>((set) => ({
   isToolbarOpen: true,
-  setIsToolbarOpen: (isOpen) => set(({ isToolbarOpen: isOpen })),
+  toolbarContext: 'global',
+  setToolbarContext: (context) => set({ toolbarContext: context }),
+  setIsToolbarOpen: (isOpen, context) => set(({ isToolbarOpen: isOpen, toolbarContext: context })),
   toggleToolbar: () => set((state) => ({ isToolbarOpen: !state.isToolbarOpen })),
 
   selectedNode: '',
