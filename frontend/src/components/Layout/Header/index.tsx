@@ -6,6 +6,10 @@ import Button from '@/components/Elements/Button/Button';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import IconButton from '@/components/Elements/Button/IconButton';
 import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
+import FnCallWhite from '@/assets/icons/code_white.png';
+import FnCallBlack from '@/assets/icons/code_black.png';
+import BizCompWhite from '@/assets/icons/tree_white.png';
+import BizCompBlack from '@/assets/icons/tree_black.png';
 
 const HeaderHeight = 64;
 
@@ -30,14 +34,14 @@ export const Header: React.FC = () => {
           <div className='cursor-pointer' onClick={() => navigate('/')}>
             <img className='h-10' src={CodeMapLogo} alt='logo' />
           </div>
-          <div className='flex w-full gap-2 ms-8'>
+          <div className='flex w-full gap-4 ms-8'>
             <Routes>
               <Route
                 path='/business-comps'
                 element={
                   <>
-                    <Button onClick={navigateToBiz} variant='black'>Business Component</Button>
-                    <Button onClick={navigateToFn} variant='black' style='outline'>
+                    <Button onClick={navigateToBiz} variant='black' startImgIcon={BizCompWhite} size='sm'>Business Component</Button>
+                    <Button onClick={navigateToFn} variant='black' style='outline' startImgIcon={FnCallBlack} size='sm'>
                       Function Call
                     </Button>
                     {/* <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/> */}
@@ -48,8 +52,8 @@ export const Header: React.FC = () => {
                 path='/function-call'
                 element={
                   <>
-                    <Button onClick={navigateToBiz} variant='black' style='outline'>Business Component</Button>
-                    <Button onClick={navigateToFn} variant='black'>
+                    <Button onClick={navigateToBiz} variant='black' style='outline' startImgIcon={BizCompBlack} size='sm'>Business Component</Button>
+                    <Button onClick={navigateToFn} variant='black' startImgIcon={FnCallWhite} size='sm'>
                       Function Call
                     </Button>
                     {/* <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/> */}

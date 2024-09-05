@@ -14,6 +14,7 @@ interface ButtonProps {
   isFullWidth?: boolean;
   className?: string;
   children?: React.ReactNode
+  startImgIcon?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   className,
+  startImgIcon,
   ...props
 }) => {
   const btnStyleSolidClasses = {
@@ -50,7 +52,7 @@ const Button: React.FC<ButtonProps> = ({
     disabled: 'disabled:opacity-70 disabled:cursor-not-allowed',
     size: {
       xs: 'py-1 px-2 text-sm',
-      sm: 'py-1 px-2 text-sm h-8',
+      sm: 'py-2 px-2.5 text-sm',
       md: 'py-2 px-6 text-md',
       lg: 'py-3 px-8 text-lg',
     },
@@ -84,6 +86,7 @@ const Button: React.FC<ButtonProps> = ({
           <span className="sr-only">Loading...</span>
         </span>
       )}
+      {startImgIcon && <span className="h-5 w-5"><img src={startImgIcon} className='w-full h-full'/></span>}
       {!isLoading && startIcon && <span className="h-5 w-5">{startIcon}</span>}
       <span className="mx-2">{props.children}</span>
       {!isLoading && endIcon && <span className="h-5 w-5">{endIcon}</span>}
