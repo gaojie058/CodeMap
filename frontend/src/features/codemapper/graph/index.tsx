@@ -127,6 +127,7 @@ export const LocalGraph: React.FC<LocalGraph> = ({ dot, onExpand, onRegenerate, 
       <Button
         variant='black'
         className='absolute bottom-0 right-0 mb-2 mr-2'
+        disabled={!dot}
         onClick={onRegenerate}
       >
         Regenerate

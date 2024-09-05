@@ -73,6 +73,7 @@ const FnLocalUnderstanding: React.FC = () => {
   useEffect(() => {
     const updateStates = () => {
       if (gptResFnCallLocalGraph) {
+        console.debug('gptResFnCallLocalGraph', gptResFnCallLocalGraph);
         setFnCallLocalDOT(extractDotContent(gptResFnCallLocalGraph));
       }
 
@@ -138,6 +139,7 @@ const FnLocalUnderstanding: React.FC = () => {
             disabled={!fnCallSelectedNode}
             isLoading={isHighlightedExpLoading}
             onToggle={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
+            onRegenerate={() => setFnCallLocalHighlightFlow(null)}
             content={renderDisclosureItems(fnCallLocalHighlightFlow)}
           />
 
@@ -147,6 +149,7 @@ const FnLocalUnderstanding: React.FC = () => {
             disabled={!fnCallSelectedNode}
             isLoading={isRelevantExpLoading}
             onToggle={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
+            onRegenerate={() => setFnCallLocalRelevantFlow(null)}
             content={renderDisclosureItems(fnCallLocalRelevantFlow)}
           />
         </div>

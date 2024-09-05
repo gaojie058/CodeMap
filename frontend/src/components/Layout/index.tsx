@@ -24,7 +24,7 @@ const MainContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  padding: 1rem 2rem;
+  // padding: 1rem 2rem;
   overflow: hidden;
 `;
 
@@ -42,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Routes>
             <div className='flex h-full w-full overflow-hidden'>
               <Routes>
-                <Route path='/understand/*' element={<Sidebar />} />
+                {/* <Route path='/understand/*' element={<Sidebar />} /> */}
               </Routes>
               <MainContainer>
                 <main

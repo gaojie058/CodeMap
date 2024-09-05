@@ -100,7 +100,6 @@ const BizGlobalUnderstanding: React.FC = () => {
           ))
         )}
 
-        {/* Need to parse data into disclosure items above */}
         {!bizGlobalUnderstanding && (
           <GptComponent
             queryType='P1_R1_projectAnalysisJson'

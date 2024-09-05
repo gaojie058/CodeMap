@@ -6,6 +6,8 @@ import useToolbarStore from '@/store/toolbarStore';
 import { extractDotContent } from '@/utils/extractdot';
 import useStore from '@/store/store';
 import Spinner from '@/components/Elements/Spinner/Spinner';
+import Button from '@/components/Elements/Button/Button';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 /**
  * Renders the `Function Call` section of Code Mapper
@@ -33,13 +35,29 @@ const FunctionCall: React.FC = () => {
 
   return (
     <>
-      <div className='w-full h-screen overflow-hidden'>
-        {isLoading ? (
+      {isLoading ? (
+        <div className='my-48'>
           <Spinner loadingText='Loading Global Map of the Codebase' />
-        ) : (
-          fnCallDOT && <div className='w-full h-screen overflow-hidden'><AnalysisGraph dotData={fnCallDOT} understanding='functioncall' /></div>
-        )}
-      </div>
+        </div>
+      ) : (
+        fnCallDOT && (
+          <div className='w-full h-screen overflow-hidden relative'>
+            <AnalysisGraph dotData={fnCallDOT} understanding='functioncall' />
+            <div className='absolute left-8 bottom-28'>
+              <Button
+                variant='black'
+                onClick={() => setFnCallDOT(null)}
+                startIcon={<ArrowPathIcon />}
+              >
+                Regenerate this graph
+              </Button>
+              <span className='text-gray-700 text-xs'>
+                Drag or zoom out/in to check details.
+              </span>
+            </div>
+          </div>
+        )
+      )}
 
       <Toolbar
         isOpen={isToolbarOpen}

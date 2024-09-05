@@ -118,7 +118,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ isOpen, onClose, type }) => {
           </div>
         </TabGroup>
         <div className='absolute bottom-16 right-8'>
-          <Chatbot />
+          <Chatbot context={type}/>
         </div>
       </Slideover>
     </>

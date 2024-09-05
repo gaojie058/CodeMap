@@ -138,6 +138,7 @@ const BizLocalUnderstanding: React.FC = () => {
               disabled={!bizCompSelectedNode}
               isLoading={isHighlightedExpLoading}
               onToggle={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
+              onRegenerate={() => setBizCompLocalHighlightFlow(null)}
               content={renderDisclosureItems(bizCompLocalHighlightFlow)}
             />
 
@@ -147,6 +148,7 @@ const BizLocalUnderstanding: React.FC = () => {
               disabled={!bizCompSelectedNode}
               isLoading={isRelevantExpLoading}
               onToggle={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
+              onRegenerate={() => setBizCompLocalRelevantFlow(null)}
               content={renderDisclosureItems(bizCompLocalRelevantFlow)}
             />
           </div>

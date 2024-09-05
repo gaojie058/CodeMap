@@ -18,8 +18,8 @@ const HeaderContainer = styled.div`
 export const Header: React.FC = () => {
   const navigate = useNavigate();
 
-  const navigateToBiz = () => navigate('/business-comps');
-  const navigateToFn = () => navigate('/function-call');
+  const navigateToBiz = () => navigate('/understand/business-comps');
+  const navigateToFn = () => navigate('/understand/function-call');
 
   const toggleToolbar = useToolbarStore((state) => state.toggleToolbar);
 
@@ -33,26 +33,26 @@ export const Header: React.FC = () => {
           <div className='flex w-full gap-2 ms-8'>
             <Routes>
               <Route
-                path='/understand/business-comps'
+                path='/business-comps'
                 element={
                   <>
-                    <Button onClick={navigateToBiz}>Business Component</Button>
-                    <Button onClick={navigateToFn} style='outline'>
+                    <Button onClick={navigateToBiz} variant='black'>Business Component</Button>
+                    <Button onClick={navigateToFn} variant='black' style='outline'>
                       Function Call
                     </Button>
-                    <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/>
+                    {/* <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/> */}
                   </>
                 }
               />
               <Route
-                path='/understand/function-call'
+                path='/function-call'
                 element={
                   <>
-                    <Button onClick={navigateToBiz} style='outline'>Business Component</Button>
-                    <Button onClick={navigateToFn}>
+                    <Button onClick={navigateToBiz} variant='black' style='outline'>Business Component</Button>
+                    <Button onClick={navigateToFn} variant='black'>
                       Function Call
                     </Button>
-                    <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/>
+                    {/* <IconButton icon={<Bars3BottomRightIcon />} onClick={toggleToolbar} className='ml-auto'/> */}
                   </>
                 }
               />
