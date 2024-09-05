@@ -28,8 +28,6 @@ const BusinessComponents: React.FC = () => {
   );
   const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
 
-  const hasRunOnce = useRef(false);
-
   const dotFromGPT = useMemo(() => {
     if (gptResponse) {
       return extractDotContent(gptResponse);
@@ -43,14 +41,9 @@ const BusinessComponents: React.FC = () => {
     }
   }, [dotFromGPT, setBizCompDOT]);
 
-  useEffect(() => {
-    if (!hasRunOnce.current) {
-      hasRunOnce.current = true;
-    }
-  }, []);
 
   const gptComponentMemo = useMemo(() => {
-    if (!bizCompDOT && !hasRunOnce.current) {
+    if (!bizCompDOT) {
       return (
         <GptComponent
           queryType='P2_R2_systemStructureDot'
@@ -65,7 +58,9 @@ const BusinessComponents: React.FC = () => {
   return (
     <>
       {isLoading ? (
-        <Spinner loadingText='Loading Global Map of the Codebase' />
+        <div className='my-48'>
+          <Spinner loadingText='Loading Global Map of the Codebase' />
+        </div>
       ) : (
         bizCompDOT && (
           <div className='w-full h-screen overflow-hidden'>

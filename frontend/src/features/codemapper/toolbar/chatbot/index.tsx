@@ -32,7 +32,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer, context
   const [message, setMessage] = useState<string>('');
   const [chats, setChats] = useState<ChatMessage[]>(initialMessage);
   const [isTyping, setIsTyping] = useState<boolean>(false);
-  const [customMessageSent, setCustomMessageSent] = useState<boolean>(false);
 
   const {fnCallDOT, fnCallSelectedNode, bizCompDOT, bizCompSelectedNode} = useStore();
 
@@ -67,11 +66,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer, context
   
     try {
       let messageToSend = message;
-
-      if (!customMessageSent) {
-        messageToSend = customizeMessage(message);
-        setCustomMessageSent(true);
-      }
+      messageToSend = customizeMessage(message);
 
       await chatService.sendMessage(messageToSend, (content) => {
         setChats(prevChats => {
