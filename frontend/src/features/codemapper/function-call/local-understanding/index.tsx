@@ -27,7 +27,6 @@ const FnLocalUnderstanding: React.FC = () => {
   const [isHighlightedExpOpen, setIsHighlightedExpOpen] = useState<boolean>(false);
   const [isRelevantExpOpen, setIsRelevantExpOpen] = useState<boolean>(false);
 
-  const { selectedNode } = useToolbarStore();
   const {
     fnCallLocalDOT,
     setFnCallLocalDOT,
@@ -36,6 +35,11 @@ const FnLocalUnderstanding: React.FC = () => {
     fnCallLocalRelevantFlow,
     setFnCallLocalRelevantFlow,
   } = useStore();
+
+  const { fnCallSelectedNode, setFnCallSelectedNode } = useStore((state) => ({
+    fnCallSelectedNode: state.fnCallSelectedNode,
+    setFnCallSelectedNode: state.setFnCallSelectedNode,
+  }));
 
   // gpt responses
   const [gptResFnCallLocalGraph, setGptResFnCallLocalGraph] = useState<string | null>(null);
@@ -63,10 +67,13 @@ const FnLocalUnderstanding: React.FC = () => {
     const handleHighlightedExpLoadingChange = (loading: boolean) => setIsHighlightedExpLoading(loading);
     const handleRelevantExpLoadingChange = (loading: boolean) => setIsRelevantExpLoading(loading);
 
+    const [localSelectedNode, setLocalSelectedNode] = useState<any>(fnCallSelectedNode);
+
   // update global store
   useEffect(() => {
     const updateStates = () => {
       if (gptResFnCallLocalGraph) {
+        console.debug('gptResFnCallLocalGraph', gptResFnCallLocalGraph);
         setFnCallLocalDOT(extractDotContent(gptResFnCallLocalGraph));
       }
 
@@ -86,11 +93,18 @@ const FnLocalUnderstanding: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (selectedNode) {
+    if (fnCallSelectedNode) {
       setIsHighlightedExpOpen(true);
       setIsRelevantExpOpen(true);
+
+      if (fnCallSelectedNode !== localSelectedNode) {
+        setFnCallLocalDOT(null);
+        setFnCallLocalHighlightFlow(null);
+        setFnCallLocalRelevantFlow(null);
+        setLocalSelectedNode(fnCallSelectedNode);
+      }
     }
-  }, [selectedNode]);
+  }, [fnCallSelectedNode, localSelectedNode]);
 
   const renderDisclosureItems = (items: any[]) => {
     if (!items) return null;
@@ -114,7 +128,7 @@ const FnLocalUnderstanding: React.FC = () => {
         <LocalGraph
           dot={fnCallLocalDOT}
           onExpand={() => setIsMiniGraphOpen(true)}
-          onRegenerate={() => {}}
+          onRegenerate={() => setFnCallLocalDOT(null)}
           isLoading={isLocalmapLoading}
         />
 
@@ -122,44 +136,46 @@ const FnLocalUnderstanding: React.FC = () => {
           <DisclosureSection
             title='Explain the highlighted inheritance flow'
             isOpen={isHighlightedExpOpen}
-            disabled={!selectedNode}
+            disabled={!fnCallSelectedNode}
             isLoading={isHighlightedExpLoading}
             onToggle={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
+            onRegenerate={() => setFnCallLocalHighlightFlow(null)}
             content={renderDisclosureItems(fnCallLocalHighlightFlow)}
           />
 
           <DisclosureSection
             title='Relevant inheritance flow'
             isOpen={isRelevantExpOpen}
-            disabled={!selectedNode}
+            disabled={!fnCallSelectedNode}
             isLoading={isRelevantExpLoading}
             onToggle={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
+            onRegenerate={() => setFnCallLocalRelevantFlow(null)}
             content={renderDisclosureItems(fnCallLocalRelevantFlow)}
           />
         </div>
 
-        {selectedNode && !fnCallLocalDOT && (
+        {fnCallSelectedNode && !fnCallLocalDOT && (
           <GptComponent
             queryType='P9_R9_functionCallFlow'
-            params={{ selectedNode }}
+            params={{ fnCallSelectedNode }}
             onResponseReceived={handleResFnCallLocalGraph}
             onLoadingChange={handleLocalMapLoadingChange}
           />
         )}
 
-        {selectedNode && !gptResHighlightedFnCallFlow && (
+        {fnCallSelectedNode && !fnCallLocalHighlightFlow && (
           <GptComponent
             queryType='P8_R8_functionCallLocalDesc'
-            params={{ selectedNode }}
+            params={{ fnCallSelectedNode }}
             onResponseReceived={handleResHighlightedFnCallFlow}
             onLoadingChange={handleHighlightedExpLoadingChange}
           />
         )}
 
-        {selectedNode && !gptResRelevantFnCallFlow && (
+        {fnCallSelectedNode && !fnCallLocalRelevantFlow && (
           <GptComponent
             queryType='P10_R10_functionCallLocalExplain'
-            params={{ selectedNode }}
+            params={{ fnCallSelectedNode }}
             onResponseReceived={handleResRelevantFnCallFlow}
             onLoadingChange={handleRelevantExpLoadingChange}
           />

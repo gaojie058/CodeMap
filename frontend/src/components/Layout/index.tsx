@@ -2,6 +2,7 @@ import React from 'react';
 import Sidebar from './Sidebar';
 import { Header } from './Header';
 import styled from '@emotion/styled';
+import { Route, Routes } from 'react-router-dom';
 
 const LayoutContainer = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ const MainContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  padding: 1rem 2rem;
+  // padding: 1rem 2rem;
   overflow: hidden;
 `;
 
@@ -36,9 +37,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className='flex flex-col'>
         <div className='flex h-full w-full overflow-hidden'>
           <LayoutContainer>
-            <Header />
+            <Routes>
+              <Route path='/understand/*' element={<Header />} />
+            </Routes>
             <div className='flex h-full w-full overflow-hidden'>
-              <Sidebar />
+              <Routes>
+                {/* <Route path='/understand/*' element={<Sidebar />} /> */}
+              </Routes>
               <MainContainer>
                 <main
                   id='main-content'

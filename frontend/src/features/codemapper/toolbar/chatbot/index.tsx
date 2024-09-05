@@ -9,6 +9,7 @@ import chatService from '@gpt/chatService';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
+import useStore from '@/store/store';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -17,9 +18,10 @@ interface ChatMessage {
 
 interface ChatWindowProps {
   toggleChatbotContainer: () => void;
+  context: 'BUSINESS' | 'FUNCTION_CALL';
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer, context }) => {
   const initialMessage: ChatMessage[] = [
     {
       role: 'assistant',
@@ -30,10 +32,24 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
   const [message, setMessage] = useState<string>('');
   const [chats, setChats] = useState<ChatMessage[]>(initialMessage);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [customMessageSent, setCustomMessageSent] = useState<boolean>(false);
+
+  const {fnCallDOT, fnCallSelectedNode, bizCompDOT, bizCompSelectedNode} = useStore();
 
   useEffect(() => {
     chatService.initializeThread();
   }, []);
+
+  const customizeMessage = (message: string): string => {
+    let customContent = '';
+    if(context === 'FUNCTION_CALL') {
+      customContent = `${fnCallDOT} selectedNode: ${fnCallSelectedNode}`
+    } else if (context === 'BUSINESS') {
+      customContent = `${bizCompDOT} selectedNode: ${bizCompSelectedNode}`
+    }
+    const customMessage = `${customContent} ${message}`;
+    return customMessage;
+  };
 
   const chat = async (e: FormEvent<HTMLFormElement>, message: string) => {
     e.preventDefault();
@@ -50,7 +66,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
     setMessage('');
   
     try {
-      await chatService.sendMessage(message, (content) => {
+      let messageToSend = message;
+
+      if (!customMessageSent) {
+        messageToSend = customizeMessage(message);
+        setCustomMessageSent(true);
+      }
+
+      await chatService.sendMessage(messageToSend, (content) => {
         setChats(prevChats => {
           const updatedChats = [...prevChats];
           if (updatedChats[updatedChats.length - 1].role === 'assistant') {
@@ -91,7 +114,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer }) => {
   );
 };
 
-export const Chatbot: React.FC = () => {
+interface ChatbotProps {
+  context: 'BUSINESS' | 'FUNCTION_CALL';
+}
+export const Chatbot: React.FC<ChatbotProps> = ({ context }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleChatbotContainer = () => {
@@ -113,7 +139,7 @@ export const Chatbot: React.FC = () => {
           isOpen ? 'open' : 'closed'
         } rounded-xl shadow-lg border border-gray-200`}
       >
-        <ChatWindow toggleChatbotContainer={toggleChatbotContainer} />
+        <ChatWindow toggleChatbotContainer={toggleChatbotContainer} context={context} />
       </div>
     </div>
   );
@@ -125,12 +151,6 @@ interface ChatHistoryProps {
 
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chats }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (chats.length > 1)
-      chatContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chats]);
-
   return (
     <>
       <section className='max-h-96 my-4 overflow-y-auto flex flex-col gap-2'>

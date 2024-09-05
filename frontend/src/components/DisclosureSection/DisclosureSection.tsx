@@ -1,6 +1,7 @@
 import React from 'react';
 import Spinner from '../Elements/Spinner/Spinner';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import IconButton from '../Elements/Button/IconButton';
 
 interface DisclosureSectionProps {
   title: string;
@@ -8,6 +9,7 @@ interface DisclosureSectionProps {
   disabled: boolean;
   isLoading: boolean;
   onToggle: () => void;
+  onRegenerate: () => void;
   content: React.ReactNode;
 }
 
@@ -17,6 +19,7 @@ const DisclosureSection: React.FC<DisclosureSectionProps> = ({
   disabled,
   isLoading,
   onToggle,
+  onRegenerate,
   content,
 }) => (
   <div>
@@ -28,6 +31,7 @@ const DisclosureSection: React.FC<DisclosureSectionProps> = ({
       }`}
     >
       {title}
+      <IconButton icon={<ArrowPathIcon />} onClick={onRegenerate} className='ml-auto mr-2' disabled={isLoading}/>
       <ChevronDownIcon
         className={`size-4 fill-white/60 ${
           isOpen ? 'rotate-180' : 'group-data-[hover]:fill-white/50'

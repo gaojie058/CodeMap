@@ -36,6 +36,11 @@ const BizLocalUnderstanding: React.FC = () => {
     setBizCompLocalRelevantFlow,
   } = useStore();
 
+  const { bizCompSelectedNode, setBizCompSelectedNode } = useStore((state) => ({
+    bizCompSelectedNode: state.bizCompSelectedNode,
+    setBizCompSelectedNode: state.setBizCompSelectedNode,
+  }));
+
   // gpt responses
   const [gptResponseBizLocalGraph, setGptResponseBizLocalGraph] = useState<string | null>(null);
   const [gptResHighlightedBizFlow, setGptResHighlightedBizFlow] = useState<any>(null);
@@ -55,6 +60,8 @@ const BizLocalUnderstanding: React.FC = () => {
   const handleLocalMapLoadingChange = (loading: boolean) => setIsLocalmapLoading(loading);
   const handleHighlightedExpLoadingChange = (loading: boolean) => setIsHighlightedExpLoading(loading);
   const handleRelevantExpLoadingChange = (loading: boolean) => setIsRelevantExpLoading(loading);
+
+  const [localSelectedNode, setLocalSelectedNode] = useState<any>(bizCompSelectedNode);
 
   // update global store
   useEffect(() => {
@@ -79,11 +86,25 @@ const BizLocalUnderstanding: React.FC = () => {
   ]);
 
   useEffect(() => {
-    if (selectedNode) {
+    if (bizCompSelectedNode) {
       setIsHighlightedExpOpen(true);
       setIsRelevantExpOpen(true);
     }
-  }, [selectedNode]);
+  }, [bizCompSelectedNode]);
+
+  useEffect(() => {
+    if (bizCompSelectedNode) {
+      setIsHighlightedExpOpen(true);
+      setIsRelevantExpOpen(true);
+
+      if (bizCompSelectedNode !== localSelectedNode) {
+        setBizCompLocalDOT(null);
+        setBizCompLocalHighlightFlow(null);
+        setBizCompLocalRelevantFlow(null);
+        setLocalSelectedNode(bizCompSelectedNode);
+      }
+    }
+  }, [bizCompSelectedNode, localSelectedNode]);
 
   const renderDisclosureItems = (data: any) => {
     if (!data) return null;
@@ -106,7 +127,7 @@ const BizLocalUnderstanding: React.FC = () => {
           <LocalGraph
             dot={bizCompLocalDOT}
             onExpand={() => setIsMiniGraphOpen(true)}
-            onRegenerate={() => {}}
+            onRegenerate={() => setBizCompLocalDOT(null)}
             isLoading={isLocalmapLoading}
           />
 
@@ -114,44 +135,46 @@ const BizLocalUnderstanding: React.FC = () => {
             <DisclosureSection
               title='Explain the highlighted business flow'
               isOpen={isHighlightedExpOpen}
-              disabled={!selectedNode}
+              disabled={!bizCompSelectedNode}
               isLoading={isHighlightedExpLoading}
               onToggle={() => setIsHighlightedExpOpen(!isHighlightedExpOpen)}
+              onRegenerate={() => setBizCompLocalHighlightFlow(null)}
               content={renderDisclosureItems(bizCompLocalHighlightFlow)}
             />
 
             <DisclosureSection
               title='Relevant business flow'
               isOpen={isRelevantExpOpen}
-              disabled={!selectedNode}
+              disabled={!bizCompSelectedNode}
               isLoading={isRelevantExpLoading}
               onToggle={() => setIsRelevantExpOpen(!isRelevantExpOpen)}
+              onRegenerate={() => setBizCompLocalRelevantFlow(null)}
               content={renderDisclosureItems(bizCompLocalRelevantFlow)}
             />
           </div>
 
-          {selectedNode && !bizCompLocalDOT && (
+          {bizCompSelectedNode && !bizCompLocalDOT && (
             <GptComponent
               queryType='P3_R3_businessLocalGraph'
-              params={{ selectedNode }}
+              params={{ bizCompSelectedNode }}
               onResponseReceived={handleResBizLocalGraph}
               onLoadingChange={handleLocalMapLoadingChange}
             />
           )}
 
-          {selectedNode && !bizCompLocalHighlightFlow && (
+          {bizCompSelectedNode && !bizCompLocalHighlightFlow && (
             <GptComponent
               queryType='P4_R4_businessFlowAnalysis'
-              params={{ selectedNode }}
+              params={{ bizCompSelectedNode }}
               onResponseReceived={handleResHighlightedBizFlow}
               onLoadingChange={handleHighlightedExpLoadingChange}
             />
           )}
 
-          {selectedNode && !bizCompLocalRelevantFlow && (
+          {bizCompSelectedNode && !bizCompLocalRelevantFlow && (
             <GptComponent
               queryType='P5_R5_componentRelationAnalysis'
-              params={{ selectedNode }}
+              params={{ bizCompSelectedNode }}
               onResponseReceived={handleResRelevantBizFlow}
               onLoadingChange={handleRelevantExpLoadingChange}
             />
