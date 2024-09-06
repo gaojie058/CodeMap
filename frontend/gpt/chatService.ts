@@ -7,7 +7,8 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true // 仅用于开发/测试
 });
 
-const assistantId = "asst_afppI9S4O6Jbwz513XYAyEmH";
+// const assistantId = "asst_afppI9S4O6Jbwz513XYAyEmH";
+const assistantId = "asst_1rm5Iq7odQeJcMwC8sCbAzx3";
 
 class ChatService {
   private threadId: string | null = null;

@@ -146,9 +146,16 @@ interface ChatHistoryProps {
 
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chats }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chats]);
+
   return (
     <>
-      <section className='max-h-96 my-4 overflow-y-auto flex flex-col gap-2'>
+      <section ref={chatContainerRef} className='max-h-96 my-4 overflow-y-auto flex flex-col gap-2 ui-chat'>
         {chats && chats.length
           ? chats.map((chat, index) => (
               <div
@@ -186,7 +193,6 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chats }) => {
             ))
           : null}
       </section>
-      <div ref={chatContainerRef} />
     </>
   );
 };
