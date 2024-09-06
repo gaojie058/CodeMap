@@ -8,7 +8,9 @@ const openai = new OpenAI({
 });
 
 // const assistantId = "asst_afppI9S4O6Jbwz513XYAyEmH";
-const assistantId = "asst_1rm5Iq7odQeJcMwC8sCbAzx3";
+
+// const assistantId = "asst_1rm5Iq7odQeJcMwC8sCbAzx3";
+const assistantId = "asst_dTXAcHRrR3oIQqrUIkzrgdvw";
 
 class ChatService {
   private threadId: string | null = null;
