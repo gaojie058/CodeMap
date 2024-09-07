@@ -6,24 +6,31 @@ import Button from '@/components/Elements/Button/Button';
 import IconButton from '@/components/Elements/Button/IconButton';
 import { ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/components/Elements/Spinner/Spinner';
+import useStore from '@/store/store';
 
 interface AnalysisGraphProps {
   dotData: string | null;
+  understanding?: 'businesscomponent' | 'functioncall' | null;
 }
 
 // TODO: Add highlighted nodes and edges when clicked
-export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({ dotData }) => {
+export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({ dotData, understanding }) => {
   const graphRef = useRef<HTMLDivElement | null>(null);
 
-  const { setSelectedNode, isToolbarOpen, setIsToolbarOpen } = useToolbarStore();
-  
+  const { toolbarContext, isToolbarOpen, setIsToolbarOpen } = useToolbarStore();
+  const { setBizCompSelectedNode, setFnCallSelectedNode } = useStore();
+
   // TODO: Triggers `Toolbar` when clicked
   const handleNodeClick = useCallback((event: MouseEvent) => {
     const target = event.currentTarget as SVGElement;
     const labelElement = target.querySelector('text');
     const label = labelElement?.textContent || '';
-    if(!isToolbarOpen) setIsToolbarOpen(true);
-    setSelectedNode(label);
+    setIsToolbarOpen(true, 'local');
+    if (understanding === 'businesscomponent') {
+      setBizCompSelectedNode(label);
+    } else if (understanding === 'functioncall') {
+      setFnCallSelectedNode(label);
+    }
   }, []);
 
   const handleEdgeClick = useCallback((event: MouseEvent) => {
@@ -120,6 +127,7 @@ export const LocalGraph: React.FC<LocalGraph> = ({ dot, onExpand, onRegenerate, 
       <Button
         variant='black'
         className='absolute bottom-0 right-0 mb-2 mr-2'
+        disabled={!dot}
         onClick={onRegenerate}
       >
         Regenerate

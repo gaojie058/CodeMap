@@ -3,6 +3,8 @@ import useStore from '@/store/store';
 import { GptComponent } from '@gpt/GptComponent';
 import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
 import Spinner from '@/components/Elements/Spinner/Spinner';
+import IconButton from '@/components/Elements/Button/IconButton';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 // defines `understandings` that will be rendered as collapsible items
 // TODO: add data from `GptComponent`
@@ -54,25 +56,26 @@ function extractJsonFromText(responseText: string) {
  * This component is used within the `Toolbar` to display a list of items with collapsible details.
  */
 const BizGlobalUnderstanding: React.FC = () => {
-  const [gptResponse, setGptResponse] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { bizGlobalUnderstanding, setBizGlobalUnderstanding } = useStore();
 
-  const handleResponse = (res: string | null) => setGptResponse(res);
-  const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
-
-  useEffect(() => {
-    if (gptResponse) {
-      setBizGlobalUnderstanding(extractJsonFromText(gptResponse));
+  const handleResponse = (res: string | null) => {
+    if (res) {
+      const jsonData = extractJsonFromText(res);
+      console.debug('Global understanding:', jsonData);
+      setBizGlobalUnderstanding(jsonData);
     }
-  }, [gptResponse]);
+  };
+
+  const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
 
   return (
     <>
+      <IconButton icon={<ArrowPathIcon />} onClick={() => setBizGlobalUnderstanding(null)} disabled={!bizGlobalUnderstanding && isLoading} className='ml-auto' />
       <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
         {isLoading ? (
-          <Spinner loadingText='Loading Project Overview...' />
+          <Spinner loadingText='Loading Project Overview...' className='mt-24'/>
         ) : (
           understandings[0].value &&
           understandings.map((item, index) => (
@@ -80,7 +83,6 @@ const BizGlobalUnderstanding: React.FC = () => {
           ))
         )}
 
-        {/* Need to parse data into disclosure items above */}
         {!bizGlobalUnderstanding && (
           <GptComponent
             queryType='P2_R2_systemStructureDot'

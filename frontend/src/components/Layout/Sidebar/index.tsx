@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import SidebarItem from './Elements/SidebarItem';
 import { FolderIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 
-const sidebarWidth = 96;
+const sidebarWidth = 240;
 
 const SidebarContainer = styled.div`
   width: ${sidebarWidth}px;
@@ -19,8 +19,8 @@ const Sidebar: React.FC = () => {
       >
         <div className='relative h-full w-full px-4 py-6'>
           <div className='flex flex-col gap-8'>
-            <SidebarItem to='/' icon={<FolderIcon />} />
-            <SidebarItem to='/understand' icon={<LightBulbIcon />} />
+            <SidebarItem to='/understand/business-comps' icon={<FolderIcon />} label='Business Component' />
+            <SidebarItem to='/understand/function-call' icon={<LightBulbIcon />} label='Function Call' />
           </div>
         </div>
       </SidebarContainer>

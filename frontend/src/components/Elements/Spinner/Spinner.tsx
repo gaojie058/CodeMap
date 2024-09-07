@@ -6,10 +6,11 @@ import React from 'react';
  */
 interface SpinnerProps {
   loadingText?: string;
+  className?: string;
 }
-const Spinner: React.FC<SpinnerProps> = ({ loadingText }) => {
+const Spinner: React.FC<SpinnerProps> = ({ loadingText, className }) => {
   return (
-    <div className='flex items-center justify-center my-2'>
+    <div className={`flex items-center justify-center my-2 ${className && className}`}>
       <div role='status'>
         <svg
           aria-hidden='true'

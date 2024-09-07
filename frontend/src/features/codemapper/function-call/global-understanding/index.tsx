@@ -3,6 +3,8 @@ import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
 import { GptComponent } from '@gpt/GptComponent';
 import useStore from '@/store/store';
 import Spinner from '@/components/Elements/Spinner/Spinner';
+import IconButton from '@/components/Elements/Button/IconButton';
+import { ArrowPathIcon } from '@heroicons/react/16/solid';
 
 const understandings = [
   { name: 'Overview', key: 'Overview', value: '' },
@@ -49,24 +51,35 @@ const FnGlobalUnderstanding: React.FC = () => {
   const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
 
   return (
-    <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
-      {isLoading ? (
-        <Spinner loadingText='Loading Project Overview...' />
-      ) : (
-        understandings[0].value &&
-        understandings.map((item, index) => (
-          <DisclosureItem item={item} key={`func-global-${index}`} />
-        ))
-      )}
+    <>
+      <IconButton
+        icon={<ArrowPathIcon />}
+        onClick={() => setFnGlobalUnderstanding(null)}
+        disabled={!fnGlobalUnderstanding && isLoading}
+        className='ml-auto'
+      />
+      <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
+        {isLoading ? (
+          <Spinner
+            loadingText='Loading Project Overview...'
+            className='mt-24'
+          />
+        ) : (
+          understandings[0].value &&
+          understandings.map((item, index) => (
+            <DisclosureItem item={item} key={`func-global-${index}`} />
+          ))
+        )}
 
-      {!fnGlobalUnderstanding && (
-        <GptComponent
-          queryType='P7_R7_projectStructureJson'
-          onResponseReceived={handleResponse}
-          onLoadingChange={handleLoadingChange}
-        />
-      )}
-    </div>
+        {!fnGlobalUnderstanding && (
+          <GptComponent
+            queryType='P7_R7_projectStructureJson'
+            onResponseReceived={handleResponse}
+            onLoadingChange={handleLoadingChange}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
