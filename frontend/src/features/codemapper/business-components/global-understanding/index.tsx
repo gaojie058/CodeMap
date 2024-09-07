@@ -10,40 +10,20 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 // TODO: add data from `GptComponent`
 const understandings = [
   {
-    name: 'Project Structure',
-    key: 'project_structure',
+    name: 'Project Overview',
+    key: 'projectOverview',
     value:'',
   },
   {
-    name: 'Distribution of Modules in the Project Structure',
-    key: 'module_distribution',
+    name: 'Key Modules',
+    key: 'keyModules',
     value:'',
   },
   {
-    name: 'Distribution of Files in the Project Structure',
-    key:'file_distribution',
+    name: 'Project Architecture Understanding Guide',
+    key:'projectArchitectureGuide',
     value:'',
-  },
-  {
-    name: 'Functional Relationships and Business Interactions Between the Modules of the Project',
-    key:'functional_relationships_modules',
-    value:'',
-  },
-  {
-    name: 'Business Relations and Logical Interactions Between the Files of the Project',
-    key:'business_relations_files',
-    value:'',
-  },
-  {
-    name: 'Functional Descriptions of Each Module of the Project',
-    key:'functional_descriptions_modules',
-    value:'',
-  },
-  {
-    name: 'Functional Descriptions of Each File in the Project',
-    key:'functional_descriptions_files',
-    value:'',
-  },
+  }
 ];
 
 // fix
@@ -105,7 +85,7 @@ const BizGlobalUnderstanding: React.FC = () => {
 
         {!bizGlobalUnderstanding && (
           <GptComponent
-            queryType='P1_R1_projectAnalysisJson'
+            queryType='P2_R2_systemStructureDot'
             onResponseReceived={handleResponse}
             onLoadingChange={handleLoadingChange}
           />

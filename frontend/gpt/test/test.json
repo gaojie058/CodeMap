@@ -1,0 +1,24 @@
+{
+    "projectOverview": {
+      "summary": "This project is a web application framework designed for building APIs quickly and efficiently.",
+      "entryPoint": "__main__.py",
+      "howToRun": "Run the command `python -m your_project_name` in the terminal to start the application."
+    },
+    "keyModules": {
+      "dependencies": "Handles dependency injection and resolution for processing requests.",
+      "middleware": "Contains middleware for request handling such as CORS, GZip compression, and HTTPS redirects.",
+      "openapi": "Manages OpenAPI specifications and documentation generation.",
+      "security": "Includes security features such as API key handling and OAuth2.",
+      "routing": "Defines routing logic and paths for API endpoints.",
+      "utils": "Provides various utility functions for tasks like handling requests and responses."
+    },
+    "projectArchitectureGuide": [
+      "Step 1: Start from the main entry point module '__main__.py' to understand how the application initializes and runs.",
+      "Step 2: Explore the 'dependencies' module located at 'dependencies/__init__.py' which is responsible for managing dependencies.",
+      "Step 3: Check the 'middleware' module at 'middleware/__init__.py'; understand how middleware enhances request and response handling.",
+      "Step 4: Move to 'routing.py' in the root directory to see how API routes are defined and how they connect with dependency management.",
+      "Step 5: Investigate the 'openapi' module at 'openapi/docs.py' for understanding how API documentation is generated.",
+      "Step 6: Review the 'security' module at 'security/__init__.py' to get insights into how the application handles authentication and authorization procedures.",
+      "Step 7: Use the 'utils.py' file found in various directories for additional tools and helpers available throughout the project."
+    ]
+  }
