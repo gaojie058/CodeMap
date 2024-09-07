@@ -5,7 +5,7 @@
 
 #graph-container svg .node:hover path {
   stroke: #000;
-  stroke-width: 1px;
+  stroke-width: 2px;
   cursor: pointer;
 }
 
@@ -16,4 +16,9 @@
 #graph-container svg .edge:hover path {
   stroke-width: 3px;
   cursor: pointer;
+}
+
+#graph-container svg .highlighted path {
+  stroke: black;
+  stroke-width: 2px;
 }

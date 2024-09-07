@@ -156,7 +156,7 @@ const BizLocalUnderstanding: React.FC = () => {
           {bizCompSelectedNode && !bizCompLocalDOT && (
             <GptComponent
               queryType='P3_R3_businessLocalGraph'
-              params={{ bizCompSelectedNode }}
+              params={{ selectedNode: bizCompSelectedNode }}
               onResponseReceived={handleResBizLocalGraph}
               onLoadingChange={handleLocalMapLoadingChange}
             />
@@ -165,7 +165,7 @@ const BizLocalUnderstanding: React.FC = () => {
           {bizCompSelectedNode && !bizCompLocalHighlightFlow && (
             <GptComponent
               queryType='P4_R4_businessFlowAnalysis'
-              params={{ bizCompSelectedNode }}
+              params={{ highlightedBusinessFlow: bizCompSelectedNode }}
               onResponseReceived={handleResHighlightedBizFlow}
               onLoadingChange={handleHighlightedExpLoadingChange}
             />
@@ -174,7 +174,7 @@ const BizLocalUnderstanding: React.FC = () => {
           {bizCompSelectedNode && !bizCompLocalRelevantFlow && (
             <GptComponent
               queryType='P5_R5_componentRelationAnalysis'
-              params={{ bizCompSelectedNode }}
+              params={{ relatedComponent: bizCompSelectedNode }}
               onResponseReceived={handleResRelevantBizFlow}
               onLoadingChange={handleRelevantExpLoadingChange}
             />

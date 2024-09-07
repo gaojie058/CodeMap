@@ -157,7 +157,7 @@ const FnLocalUnderstanding: React.FC = () => {
         {fnCallSelectedNode && !fnCallLocalDOT && (
           <GptComponent
             queryType='P9_R9_functionCallFlow'
-            params={{ fnCallSelectedNode }}
+            params={{ selectedNode: fnCallSelectedNode }}
             onResponseReceived={handleResFnCallLocalGraph}
             onLoadingChange={handleLocalMapLoadingChange}
           />
@@ -166,7 +166,7 @@ const FnLocalUnderstanding: React.FC = () => {
         {fnCallSelectedNode && !fnCallLocalHighlightFlow && (
           <GptComponent
             queryType='P8_R8_functionCallLocalDesc'
-            params={{ fnCallSelectedNode }}
+            params={{ selectedNode: fnCallSelectedNode }}
             onResponseReceived={handleResHighlightedFnCallFlow}
             onLoadingChange={handleHighlightedExpLoadingChange}
           />
@@ -175,7 +175,7 @@ const FnLocalUnderstanding: React.FC = () => {
         {fnCallSelectedNode && !fnCallLocalRelevantFlow && (
           <GptComponent
             queryType='P10_R10_functionCallLocalExplain'
-            params={{ fnCallSelectedNode }}
+            params={{ selectedNode: fnCallSelectedNode }}
             onResponseReceived={handleResRelevantFnCallFlow}
             onLoadingChange={handleRelevantExpLoadingChange}
           />
