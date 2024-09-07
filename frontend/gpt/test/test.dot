@@ -1,0 +1,62 @@
+digraph SystemStructure {
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10]
+  edge [fontname="Helvetica", fontsize=8, fontcolor=gray30]
+
+  // Dependencies Module
+  subgraph cluster_dependencies {
+    label="Dependencies Module"
+    style="filled,rounded"
+    color="#cbe7f2"
+    node [color="#e3f2fa"]
+
+    DependenciesHandler [label=<<b>Dependencies Handler</b><br/><br/>Components description: (Manages request dependencies)<br/>Key Functions: (solve_dependencies)<br/>Key Variables: (request, response)<br/>Key Files: (dependencies/__init__.py)>]
+  }
+
+  // Middleware Module
+  subgraph cluster_middleware {
+    label="Middleware Module"
+    style="filled,rounded"
+    color="#d3f0d3"
+    node [color="#eaf7ea"]
+
+    CORS [label=<<b>CORS Middleware</b><br/><br/>Components description: (Handles cross-origin requests)<br/>Key Functions: (CORSMiddleware)<br/>Key Variables: (allow_origins)<br/>Key Files: (middleware/cors.py)>]
+    GZip [label=<<b>GZip Middleware</b><br/><br/>Components description: (Handles GZip compression)<br/>Key Functions: (GZipMiddleware)<br/>Key Variables: (compresslevel)<br/>Key Files: (middleware/gzip.py)>]
+  }
+
+  // Routing Module
+  subgraph cluster_routing {
+    label="Routing Module"
+    style="filled,rounded"
+    color="#f2cbe7"
+    node [color="#fae3f2"]
+
+    Router [label=<<b>API Router</b><br/><br/>Components description: (Defines API routes)<br/>Key Functions: (APIRouter)<br/>Key Variables: (path, response_model)<br/>Key Files: (routing.py)>]
+  }
+
+  // OpenAPI Module
+  subgraph cluster_openapi {
+    label="OpenAPI Module"
+    style="filled,rounded"
+    color="#e7d3f2"
+    node [color="#f2ecfa"]
+
+    OpenAPIHandler [label=<<b>OpenAPI Handler</b><br/><br/>Components description: (Generates API documentation)<br/>Key Functions: (create_openapi)<br/>Key Variables: (schemas)<br/>Key Files: (openapi/docs.py)>]
+  }
+
+  // Security Module
+  subgraph cluster_security {
+    label="Security Module"
+    style="filled,rounded"
+    color="#e2f2cb"
+    node [color="#f4fae3"]
+
+    SecurityManager [label=<<b>Security Manager</b><br/><br/>Components description: (Handles authentication)<br/>Key Functions: (OAuth2, APIKey)<br/>Key Variables: (scopes)<br/>Key Files: (security/oauth2.py)>]
+  }
+
+  // Relationships
+  DependenciesHandler -> Router [label="provides dependencies to"]
+  CORS -> Router [label="enhances request handling for"]
+  GZip -> Router [label="compresses responses"]
+  OpenAPIHandler -> Router [label="generates API documentation for"]
+  SecurityManager -> Router [label="secures API endpoints"]
+}
