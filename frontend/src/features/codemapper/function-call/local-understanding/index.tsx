@@ -134,7 +134,7 @@ const FnLocalUnderstanding: React.FC = () => {
 
         <div className='my-2 flex flex-col gap-4'>
           <DisclosureSection
-            title='Explain the highlighted inheritance flow'
+            title='Explain the highlighted Class'
             isOpen={isHighlightedExpOpen}
             disabled={!fnCallSelectedNode}
             isLoading={isHighlightedExpLoading}
@@ -144,7 +144,7 @@ const FnLocalUnderstanding: React.FC = () => {
           />
 
           <DisclosureSection
-            title='Relevant inheritance flow'
+            title='Relevant Class flow'
             isOpen={isRelevantExpOpen}
             disabled={!fnCallSelectedNode}
             isLoading={isRelevantExpLoading}

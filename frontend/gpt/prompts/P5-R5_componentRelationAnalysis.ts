@@ -1,40 +1,16 @@
 export const componentRelationAnalysisPrompt = {
   name: 'componentRelationAnalysis',
-  content: `Analyze the components related to {selectedNode} and provide the following information in JSON format:
+  content: `provide the following information in JSON format:
   {
-    "project_name": "Name of the project",
-    "components": [
+    "Component Name": "Name of the Selected Component",
+    "Neighbourhoood Components in the Project level": [
       {
-        "id": "componentId",
         "name": "Component Name",
-        "role": "Description of the component's role",
-        "interactions": [
-          {
-            "with": "otherComponentId",
-            "description": "How this component interacts with the other component"
-          }
+        "role": "Description of the neighbourhoood component role in the project level",
+        "interactions with selected component": "How the selected component interacts with the neighbourhoood component"
         ]
       }
-    ],
-    "processes": [
-      {
-        "name": "Process Name",
-        "steps": [
-          {
-            "step": 1,
-            "description": "Description of the step",
-            "involved_components": ["componentId1", "componentId2"]
-          }
-        ]
-      }
-    ],
-    "key_concepts": [
-      {
-        "name": "Concept Name",
-        "description": "Explanation of the concept"
-      }
-    ],
-    "additional_notes": "Any additional information or context about the component relationships"
+    ]
   }
   Provide the output strictly in this JSON format without any additional text or explanations.`
 };

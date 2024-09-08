@@ -43,7 +43,7 @@ export const queryDefinitions = {
   },
   P8_R8_inheritanceRelationExplanation: {
     promptName: 'P8_R8_inheritanceRelationExplanation' as PromptName,
-    contentTemplate: 'Explain the inheritance relation: {inheritanceRelation}',
+    contentTemplate: 'Explain the Details of the selcted node: {inheritanceRelation}',
     description: 'Explains a specific inheritance relationship in the codebase'
   },
   P9_R9_functionCallFlow: {

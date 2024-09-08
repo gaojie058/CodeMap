@@ -1,23 +1,22 @@
 export const functionCallLocalDescPrompt = {
   name: 'functionCallLocalDesc',
-  content: `Explain the inheritance relation in the highlighted node {selectedNode}. Provide the output in the following JSON format:
+  content: `
+  
+  Explain the details for the selcted node {selectedNode}. Provide the output in the following JSON format:
 
 
 {
   "highlightedInheritance": [
     {
-      "name": "Inheritance Flow Overview",
-      "key": "inheritance_flow_overview",
-      "value": "Brief overview of the inheritance flow for the highlighted node"
+      "name": "Class Overview",
+      "value": "Brief overview of the Selected Class and its flow"
     },
     {
-      "name": "Role of the Inheritance Flow in the Overall Framework",
-      "key": "role_in_framework",
-      "value": "Description of how this inheritance flow fits into the larger system"
+      "name": "Role of the Class in the Overall CodeBase",
+      "value": "Description of how this class fits in the overall codebase"
     },
     {
-      "name": "Roles of Each function understand this Inheritance Flow",
-      "key": "function_roles",
+      "name": "Roles of the key functions under this Class",
       "value": {
         "function1": "Role and purpose of function1",
         "function2": "Role and purpose of function2"

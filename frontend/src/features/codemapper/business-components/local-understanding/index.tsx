@@ -133,7 +133,7 @@ const BizLocalUnderstanding: React.FC = () => {
 
           <div className='my-2 flex flex-col gap-4'>
             <DisclosureSection
-              title='Explain the highlighted business flow'
+              title='Explain the highlighted Component and its Flow'
               isOpen={isHighlightedExpOpen}
               disabled={!bizCompSelectedNode}
               isLoading={isHighlightedExpLoading}

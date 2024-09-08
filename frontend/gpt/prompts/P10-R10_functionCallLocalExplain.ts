@@ -6,22 +6,18 @@ export const functionCallLocalExplainPrompt = {
 {
   "relevantInheritance": [
     {
-      "name": "Inheritance Flow Overview",
+      "name": "Class Name",
       "key": "inheritance_flow_overview",
-      "value": "Brief overview of the relevant inheritance flow"
-    },
+      "value": "Name of the Selected Class"
+    }
     {
-      "name": "Role of the Inheritance Flow in the Overall Framework",
-      "key": "role_in_framework",
-      "value": "Description of how this inheritance flow fits into the larger system"
-    },
-    {
-      "name": "Roles of Each function understand this Inheritance Flow",
+      "name": "Neighbourhoood Classes in the Project level",
       "key": "function_roles",
       "value": {
-        "function1": "Role and purpose of function1",
-        "function2": "Role and purpose of function2"
-        // ... more functions as needed
+        "name": "Class Name",
+        "role": "Description of the neighbourhoood Class role in the project level",
+        "interactions with selected Class": "How the selected Class interacts with the neighbourhoood Class"
+        ]
       }
     }
   ]
