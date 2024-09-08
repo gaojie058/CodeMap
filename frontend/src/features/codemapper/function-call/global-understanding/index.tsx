@@ -5,6 +5,7 @@ import useStore from '@/store/store';
 import Spinner from '@/components/Elements/Spinner/Spinner';
 import IconButton from '@/components/Elements/Button/IconButton';
 import { ArrowPathIcon } from '@heroicons/react/16/solid';
+import { json } from 'react-router-dom';
 
 const understandings = [
   { name: 'Overview', key: 'Overview', value: '' },
@@ -28,6 +29,7 @@ function extractJsonFromText(responseText: string) {
       return jsonData;
     } catch (error) {
       console.error('Failed to parse JSON:', error);
+      console.log(jsonStr)
       return null;
     }
   } else {

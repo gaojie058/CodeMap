@@ -68,7 +68,7 @@ const FunctionCall: React.FC = () => {
       {!fnCallDOT && (
         <GptComponent
           // queryType='projectOverview'
-          queryType='P6_R6_inheritanceGraph'
+          queryType='P7_R7_projectStructureJson'
           onResponseReceived={handleResponse}
           onLoadingChange={handleLoadingChange}
         />

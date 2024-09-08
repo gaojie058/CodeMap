@@ -2,91 +2,105 @@
 
 export const inheritanceGraphPrompt = {
     name: 'inheritanceGraph',
-    content: `Generate an inheritance graph:
-  
-  Output format:
-  Using dot language
-  Each node contains "Classname, function name, important variable name, file path"
-  Edge name for the relation
-  
-  Few-shot example:
-  generate the inheritance graph based on the prompt I provided, following the above dot language format:
-  digraph GenericInheritanceGraph {
-      rankdir=TB;
-      ranksep=0.7;
-      nodesep=0.5;
-      node [fontname="Arial", fontsize=9, shape=record, style="rounded,filled", color="#2C3E50"];
-      edge [fontname="Arial", fontsize=8, color="#34495E", arrowsize=0.7];
-  
-      // Core classes
-      subgraph cluster_core {
-          style=filled;
-          color="#E8F1F8";
-          label="Core Module";
-          
-          BaseClass [label="{{BaseClass|base_file.py}|{+ attribute1: Type\l+ attribute2: Type\l}|{+ method1()\l+ method2()\l+ method3()\l}}", fillcolor="#D4E6F1"];
-          
-          MainClass [label="{{MainClass|main_file.py}|{+ attribute3: Type\l+ attribute4: Type\l}|{+ method4()\l+ method5()\l+ method6()\l}}", fillcolor="#AED6F1"];
-      }
-  
-      // Module A classes
-      subgraph cluster_module_a {
-          style=filled;
-          color="#E8F8F5";
-          label="Module A";
-          
-          ClassA1 [label="{{ClassA1|module_a_file.py}|{+ attributeA1: Type\l+ attributeA2: Type\l}|{+ methodA1()\l+ methodA2()\l}}", fillcolor="#D1F2EB"];
-          
-          ClassA2 [label="{{ClassA2|module_a_file.py}|{+ attributeA3: Type\l+ attributeA4: Type\l}|{+ methodA3()\l+ methodA4()\l}}", fillcolor="#A3E4D7"];
-      }
-  
-      // Module B classes
-      subgraph cluster_module_b {
-          style=filled;
-          color="#FCF3CF";
-          label="Module B";
-          
-          ClassB1 [label="{{ClassB1|module_b_file.py}|{+ attributeB1: Type\l+ attributeB2: Type\l}|{+ methodB1()\l+ methodB2()\l}}", fillcolor="#F9E79F"];
-          
-          ClassB2 [label="{{ClassB2|module_b_file.py}|{+ attributeB3: Type\l+ attributeB4: Type\l}|{+ methodB3()\l+ methodB4()\l}}", fillcolor="#F7DC6F"];
-      }
-  
-      // Module C classes
-      subgraph cluster_module_c {
-          style=filled;
-          color="#F4ECF7";
-          label="Module C";
-          
-          ClassC1 [label="{{ClassC1|module_c_file.py}|{+ attributeC1: Type\l+ attributeC2: Type\l}|{+ methodC1()\l+ methodC2()\l}}", fillcolor="#E8DAEF"];
-          
-          ClassC2 [label="{{ClassC2|module_c_file.py}|{+ attributeC3: Type\l+ attributeC4: Type\l}|{+ methodC3()\l+ methodC4()\l}}", fillcolor="#D7BDE2"];
-      }
-  
-      // Utility classes
-      UtilityClass1 [label="{{UtilityClass1|utility_file.py}|{+ utilityAttribute1: Type\l}|{+ utilityMethod1()\l+ utilityMethod2()\l}}", fillcolor="#FAD7A0", shape=component];
-      
-      UtilityClass2 [label="{{UtilityClass2|utility_file.py}|{+ utilityAttribute2: Type\l}|{+ utilityMethod3()\l+ utilityMethod4()\l}}", fillcolor="#ABEBC6", shape=component];
-  
-      // Helper class
-      HelperClass [label="{{HelperClass|helper_file.py}|{+ helperAttribute: Type\l}|{+ helperMethod1()\l+ helperMethod2()\l}}", fillcolor="#F5B7B1", shape=ellipse];
-  
-      // Inheritance relationships
-      BaseClass -> MainClass [label="inherits\n(MainClass extends BaseClass functionality)", color="#2980B9", penwidth=2];
-      ClassA1 -> ClassA2 [label="inherits\n(ClassA2 adds specific features to ClassA1)", color="#2980B9", penwidth=2];
-      ClassB1 -> ClassB2 [label="inherits\n(ClassB2 specializes ClassB1 behavior)", color="#2980B9", penwidth=2];
-  
-      // Composition and usage relationships
-      MainClass -> ClassA2 [label="contains\n(MainClass can have multiple ClassA2 instances)", style=dashed, color="#27AE60"];
-      MainClass -> ClassB2 [label="uses\n(MainClass uses ClassB2 for specific operations)", style=dotted, color="#8E44AD"];
-      MainClass -> UtilityClass1 [label="has\n(MainClass has one UtilityClass1 instance)", style=dashed, color="#27AE60"];
-      MainClass -> ClassC1 [label="creates\n(MainClass creates ClassC1 instances as needed)", style=dotted, color="#8E44AD"];
-      MainClass -> ClassC2 [label="creates\n(MainClass creates ClassC2 for each operation)", style=dotted, color="#8E44AD"];
-      MainClass -> UtilityClass2 [label="uses\n(MainClass uses UtilityClass2 functions)", style=dotted, color="#8E44AD"];
-      ClassC1 -> HelperClass [label="contains\n(ClassC1 has one HelperClass instance)", style=dashed, color="#27AE60"];
-      ClassC2 -> UtilityClass2 [label="uses\n(ClassC2 utilizes UtilityClass2 for operations)", style=dotted, color="#8E44AD"];
-      ClassA2 -> ClassB1 [label="uses\n(ClassA2 uses ClassB1 for certain tasks)", style=dotted, color="#8E44AD"];
-      ClassB2 -> MainClass [label="references\n(ClassB2 holds a reference to MainClass)", style=dotted, color="#8E44AD"];
+    content: `Analyze the project, focus on the all above files, and return the following information:
+
+1. JSON format analysis:
+
+\`\`\`json
+{
+  "Overview": "A brief overview of the entire project structure",
+  "Modules": [
+    {
+      "Module": "Module Name:Brief description of the module's purpose",
+       "classes": [
+        {
+          "Class": "ClassName1:Concise description of the class, including its purpose and relationships with other classes, easily understandable by beginners",
+        },
+        {
+          "Class": "ClassName2:Concise description of the class, including its purpose and relationships with other classes, easily understandable by beginners",
+        },
+        ...
+      ],
+      "files": [
+        {
+          "File": "filename1:Detailed description of the file's contents and purpose, easily understandable by beginners",
+        },
+        {
+          "File": "filename2:Detailed description of the file's contents and purpose, easily understandable by beginners",
+        },
+        ...
+      ]
+         }
+  ],
+  "Relationships": [
+    "0. This whole project starts from ClassX, and then goes into ClassA.",
+    "1. ClassA uses ClassB by calling functions X and Y, in order to share data between ClassA and ClassB (e.g., varM, varN). This is to support the (purpose) of why ClassA uses ClassB.",
+    "2. After ClassA uses ClassB, the results of ClassB will be passed into ClassC, which then...",
+    "3. ...",
+    "4. ...",
+    "5. ...",
+    "6. ..."
+  ]
+}
+\`\`\`
+
+Ensure each module description is concise and each file description is detailed and beginner-friendly. The relationships should be presented as a numbered list, starting from 0, describing the flow of the project, interactions between classes, function calls, data sharing, and purposes. Provide the output strictly in this JSON format without any additional text or explanations.
+
+2. Inheritance graph using dot language:
+
+\`\`\`dot
+digraph SystemStructure {
+  rankdir=TB;
+  ranksep=0.7;
+  nodesep=0.5;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10]
+  edge [fontname="Helvetica", fontsize=8, fontcolor=gray30, arrowsize=0.7]
+
+  // Module 1
+  subgraph cluster_module1 {
+    label="Module 1"
+    style="filled,rounded"
+    color="#cbe7f2"
+    node [color="#e3f2fa"]
+
+    ClassName1 [label=<<b>ClassName1.Class</b><br/><br/>Class description: (description)<br/>Key Functions: (list)<br/>Key Variables: (list)<br/>File: (path)>]
+    ClassName2 [label=<<b>ClassName2.Class</b><br/><br/>Class description: (description)<br/>Key Functions: (list)<br/>Key Variables: (list)<br/>File: (path)>]
+
+    ClassName1 -> ClassName2 [label="Inheritance: ClassName2 extends ClassName1\\nInherited functions: func1, func2\\nInherited variables: var1, var2\\nPurpose: (description of inheritance purpose)"]
   }
-  
-  Based on the uploaded codebase, generate an inheritance graph following this format.`
-  };
+
+  // Module 2
+  subgraph cluster_module2 {
+    label="Module 2"
+    style="filled,rounded"
+    color="#d3f0d3"
+    node [color="#eaf7ea"]
+
+    ClassName3 [label=<<b>ClassName3.Class</b><br/><br/>Class description: (description)<br/>Key Functions: (list)<br/>Key Variables: (list)<br/>File: (path)>]
+    ClassName4 [label=<<b>ClassName4.Class</b><br/><br/>Class description: (description)<br/>Key Functions: (list)<br/>Key Variables: (list)<br/>File: (path)>]
+
+    ClassName3 -> ClassName4 [label="Composition: ClassName3 contains ClassName4\\nUsed functions: func3, func4\\nShared variables: var3, var4\\nPurpose: (description of composition purpose)"]
+  }
+
+  // Inter-module relationships
+  ClassName2 -> ClassName3 [label="Uses: ClassName2 uses ClassName3\\nCalled functions: func5, func6\\nShared data: var5, var6\\nPurpose: (description of usage purpose)"]
+
+  // Optional external dependencies
+  ExternalClass [label=<<b>ExternalClass</b><br/>(if applicable)>, shape=ellipse, style=dashed]
+  ClassName4.Class -> ExternalClass [label="Depends on: ClassName4 uses ExternalClass\\nUsed functions: extFunc1, extFunc2\\nShared data: extVar1, extVar2\\nPurpose: (description of dependency purpose)", style=dashed]
+}
+\`\`\`
+
+Based on the uploaded codebase, generate both the JSON analysis and the inheritance graph following these formats. Ensure that:
+
+1. The information in the dot graph aligns with the JSON.
+2. Class names are explicitly shown in the dot graph nodes as "ClassName.Class".
+3. Descriptions in the JSON are easily understandable by beginners.
+4. Class descriptions in the JSON concisely describe relationships with other classes.
+5. The dot graph node design is optimized for universal applicability across most programming languages.
+6. Relationships in the dot graph use line breaks if the output is too long.
+7. The "Relationships" section in the JSON provides a numbered list (starting from 0) describing the project flow, class interactions, function calls, data sharing, and purposes.
+8. your output must cover all the code and file I provided in prompt and vector store
+
+Ensure that the dot graph includes function-level details, specifies inheritance and other relationships between nodes, and includes class names, filenames, key functions, and key variables in each node. For inheritance relationships, specify which key functions and variables are inherited and the purpose of the inheritance.`,
+};
