@@ -63,10 +63,6 @@ src/
 
 **Server:** No server side code
 
-## Hosted Version
-you can also use the online version here: [CodeMap Online](https://code-map.vercel.app)
-
-
 ## Project Status
 
 ## Related Papers
