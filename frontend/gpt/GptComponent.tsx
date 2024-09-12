@@ -1,13 +1,11 @@
-// src/gpt/GptComponent.tsx
-
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { initializeAssistant, useAssistant } from './gptAssistant';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useAssistant } from './gptAssistant';
 import { QueryType, queryDefinitions, generateContent } from './queryDefinitions';
 
 interface GptComponentProps {
   queryType: QueryType;
   params?: Record<string, string>;
-  onResponseReceived?: (response: string | null) => void;
+  onResponseReceived?: (response: string | null, error?: string | null, type?: string) => void;
   onLoadingChange?: (loading: boolean) => void;
 }
 
@@ -16,12 +14,12 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // 使用 useMemo 缓存生成的内容
+  // Use useMemo to cache the generated content
   const content = useMemo(() => generateContent(queryType, params), [queryType, params]);
 
-  // 使用 useCallback 缓存 fetchData 函数
+  // Use useCallback to cache the fetchData function
   const fetchData = useCallback(async () => {
-    if (loading) return; // 防止重复请求
+    if (loading) return; // Prevent duplicate requests
     console.info('started');
     try {
       setLoading(true);
@@ -30,22 +28,25 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
       const result = await useAssistant(queryDefinitions[queryType].promptName, content);
       setResponse(result);
       if (onResponseReceived) {
-        onResponseReceived(result);
+        onResponseReceived(result, null, queryType);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
+      if (onResponseReceived) {
+        onResponseReceived(null, error); // Pass error message
+      }
     } finally {
       setLoading(false);
       if (onLoadingChange) onLoadingChange(loading);
     }
   }, [queryType, content, onResponseReceived, onLoadingChange]);
 
-  // 使用 useEffect 触发数据获取
+  // Use useEffect to trigger data fetching
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  // 使用 useMemo 缓存渲染结果
+  // Use useMemo to cache the rendering result
   const renderContent = useMemo(() => {
     if (error) {
       return <div>Error: {error}</div>;
@@ -70,5 +71,5 @@ export const GptComponent: React.FC<GptComponentProps> = React.memo(({ queryType
   return <div className='hidden'>{renderContent}</div>;
 });
 
-// 添加显示名称，有助于调试
+// Add display name for debugging purposes
 GptComponent.displayName = 'GptComponent';

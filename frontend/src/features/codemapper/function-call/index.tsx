@@ -1,52 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Toolbar from '../toolbar';
+import useStore from '@/store/store';
 import { AnalysisGraph } from '../graph';
 import { GptComponent } from '@gpt/GptComponent';
 import useToolbarStore from '@/store/toolbarStore';
-import { extractDotContent } from '@/utils/extractdot';
-import useStore from '@/store/store';
-import Spinner from '@/components/Elements/Spinner/Spinner';
 import Button from '@/components/Elements/Button/Button';
+import Spinner from '@/components/Elements/Spinner/Spinner';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { extractDotContent, extractJsonFromText } from '@/utils/extract';
 
-/**
- * Renders the `Function Call` section of Code Mapper
- * The rendered UI element containing the section's title, graph visualization, and toolbar.
- */
 const FunctionCall: React.FC = () => {
+  const { funcDot, isFuncLoading, setFuncDot, setFuncGlobal, setIsFuncLoading } = useStore();
   const { isToolbarOpen, toggleToolbar } = useToolbarStore();
-  const { fnCallDOT, setFnCallDOT } = useStore();
 
-  const [gptResponse, setGptResponse] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [response, setResponse] = useState<string | null>(null);
 
-  const handleResponse = (response: string | null) => {
-    setGptResponse(response);
-  };
+  const handleResponseReceived = useCallback(
+    (receivedResponse: string | null, receivedError?: string | null) => {
+      if (receivedResponse) {
+        const jsonResponse = extractJsonFromText(receivedResponse);
+        const dotResponse = extractDotContent(receivedResponse);
+        setResponse(dotResponse);
+        setFuncDot(dotResponse);
+        setFuncGlobal(jsonResponse);
+        setIsFuncLoading(false);
+      } else {
+        setResponse(null);
+      }
+      if (receivedError) setError(receivedError);
+    },
+    []
+  );
 
-  const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
+  const handleLoadingChange = useCallback((isLoading: boolean) => {
+    setIsFuncLoading(isLoading);
+  }, []);
 
   useEffect(() => {
-    if (gptResponse) {
-      const dotFromGPT = extractDotContent(gptResponse);
-      setFnCallDOT(dotFromGPT);
+    if (funcDot && !response) {
+      setResponse(funcDot);
+      setIsFuncLoading(false);
     }
-  }, [gptResponse]);
+  }, [funcDot, response]);
 
   return (
     <>
-      {isLoading ? (
-        <div className='my-48'>
-          <Spinner loadingText='Loading Global Map of the Codebase' />
-        </div>
-      ) : (
-        fnCallDOT && (
-          <div className='w-full h-screen overflow-hidden relative'>
-            <AnalysisGraph dotData={fnCallDOT} understanding='functioncall' />
+      {isFuncLoading &&  <div className='my-48'><Spinner loadingText='Loading Global Map of the Codebase' /></div>}
+      {error && <div>Error: {error}</div>}
+      {response && !isFuncLoading && !error && (
+        <div>
+          <div className='w-full h-screen overflow-hidden'>
+            <AnalysisGraph dotData={response} understanding='functioncall' />
             <div className='absolute left-8 bottom-28'>
               <Button
                 variant='black'
-                onClick={() => setFnCallDOT(null)}
+                onClick={() => setFuncDot(null)}
                 startIcon={<ArrowPathIcon />}
               >
                 Regenerate this graph
@@ -56,20 +65,13 @@ const FunctionCall: React.FC = () => {
               </span>
             </div>
           </div>
-        )
+        </div>
       )}
-
-      <Toolbar
-        isOpen={isToolbarOpen}
-        onClose={toggleToolbar}
-        type='FUNCTION_CALL'
-      />
-
-      {!fnCallDOT && (
+      <Toolbar isOpen={isToolbarOpen} onClose={toggleToolbar} type='FUNCTION_CALL' />
+      {!funcDot && !isFuncLoading && !error && (
         <GptComponent
-          // queryType='projectOverview'
           queryType='P7_R7_projectStructureJson'
-          onResponseReceived={handleResponse}
+          onResponseReceived={handleResponseReceived}
           onLoadingChange={handleLoadingChange}
         />
       )}

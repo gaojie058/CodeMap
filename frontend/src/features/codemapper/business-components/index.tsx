@@ -1,89 +1,60 @@
-import React, {
-  useEffect,
-  useState,
-  useMemo,
-  useCallback,
-  useRef,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Toolbar from '../toolbar';
 import useStore from '@/store/store';
 import { AnalysisGraph } from '../graph';
 import { GptComponent } from '@gpt/GptComponent';
 import useToolbarStore from '@/store/toolbarStore';
-import { extractDotContent } from '@/utils/extractdot';
-import Spinner from '@/components/Elements/Spinner/Spinner';
 import Button from '@/components/Elements/Button/Button';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import Spinner from '@/components/Elements/Spinner/Spinner';
+import { extractDotContent, extractJsonFromText } from '@/utils/extract';
 
 const BusinessComponents: React.FC = () => {
-  const { bizCompDOT, setBizCompDOT } = useStore();
+  const { bizDot, isBizLoading, setbizDot, setBizGlobal, setIsBizLoading } = useStore();
   const { isToolbarOpen, toggleToolbar } = useToolbarStore();
 
-  const [gptResponse, setGptResponse] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [response, setResponse] = useState<string | null>(null);
 
-  // const handleResponse = useCallback(
-  //   (res: string | null) => setGptResponse(res),
-  //   []
-  // );
-  // const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
+  const handleResponseReceived = useCallback(
+    (receivedResponse: string | null, receivedError?: string | null) => {
+      if (receivedResponse) {
+        const jsonResponse = extractJsonFromText(receivedResponse);
+        const dotResponse = extractDotContent(receivedResponse);
+        setResponse(dotResponse);
+        setbizDot(dotResponse);
+        setBizGlobal(jsonResponse);
+      } else {
+        setResponse(null);
+      }
+      if (receivedError) setError(receivedError);
+    },
+    []
+  );
 
-  // const dotFromGPT = useMemo(() => {
-  //   if (gptResponse) {
-  //     return extractDotContent(gptResponse);
-  //   }
-  //   return null;
-  // }, [gptResponse]);
-
-  // useEffect(() => {
-  //   if (dotFromGPT) {
-  //     setBizCompDOT(dotFromGPT);
-  //   }
-  // }, [dotFromGPT, setBizCompDOT]);
-
-  // const gptComponentMemo = useMemo(() => {
-  //   if (!bizCompDOT) {
-  //     return (
-  //       <GptComponent
-  //         queryType='P2_R2_systemStructureDot'
-  //         onResponseReceived={handleResponse}
-  //         onLoadingChange={handleLoadingChange}
-  //       />
-  //     );
-  //   }
-  //   return null;
-  // }, [bizCompDOT, handleResponse]);
-
-  const handleResponse = (response: string | null) => {
-    setGptResponse(response);
-  };
-
-  const handleLoadingChange = (loading: boolean) => setIsLoading(loading);
+  const handleLoadingChange = useCallback((isLoading: boolean) => {
+    setIsBizLoading(isLoading);
+  }, []);
 
   useEffect(() => {
-    if (gptResponse) {
-      const dotFromGPT = extractDotContent(gptResponse);
-      setBizCompDOT(dotFromGPT);
+    if (bizDot && !response) {
+      setResponse(bizDot);
+      setIsBizLoading(false);
     }
-  }, [gptResponse]);
+  }, [bizDot, response]);
 
   return (
     <>
-      {isLoading ? (
-        <div className='my-48'>
-          <Spinner loadingText='Loading Global Map of the Codebase' />
-        </div>
-      ) : (
-        bizCompDOT && (
+      {isBizLoading &&  <div className='my-48'><Spinner loadingText='Loading Global Map of the Codebase' /></div>}
+      {error && <div>Error: {error}</div>}
+      {response && !isBizLoading && !error && (
+        <div>
           <div className='w-full h-screen overflow-hidden'>
-            <AnalysisGraph
-              dotData={bizCompDOT}
-              understanding='businesscomponent'
-            />
+            <AnalysisGraph dotData={response} understanding='businesscomponent' />
             <div className='absolute left-8 bottom-28'>
               <Button
                 variant='black'
-                onClick={() => setBizCompDOT(null)}
+                onClick={() => setbizDot(null)}
                 startIcon={<ArrowPathIcon />}
               >
                 Regenerate this graph
@@ -93,16 +64,13 @@ const BusinessComponents: React.FC = () => {
               </span>
             </div>
           </div>
-        )
+        </div>
       )}
-
       <Toolbar isOpen={isToolbarOpen} onClose={toggleToolbar} type='BUSINESS' />
-
-      {/* {gptComponentMemo} */}
-      {!bizCompDOT && (
+      {!bizDot && !isBizLoading && !error && (
         <GptComponent
           queryType='P2_R2_systemStructureDot'
-          onResponseReceived={handleResponse}
+          onResponseReceived={handleResponseReceived}
           onLoadingChange={handleLoadingChange}
         />
       )}
@@ -110,4 +78,4 @@ const BusinessComponents: React.FC = () => {
   );
 };
 
-export default React.memo(BusinessComponents);
+export default BusinessComponents;

@@ -36,7 +36,6 @@ export const prompts = {
   P2_R2_systemStructureDot: systemStructureDotPrompt,
   projectOverview: projectOverviewPrompt,
   businessComponentFlow: businessComponentFlowPrompt,
-  // 添加更多 prompts...
 };
 
 export type PromptName = keyof typeof prompts;

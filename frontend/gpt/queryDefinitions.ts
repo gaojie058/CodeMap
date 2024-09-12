@@ -96,7 +96,7 @@ export const queryDefinitions = {
     contentTemplate: 'Explain the inheritance flow for the selected node: {selectedNode}',
     description: 'Generates a JSON representation of the inheritance flow for a specific component'
   },
-  // 可以继续添加更多的查询定义...
+  // You can continue adding more query definitions...
 };
 
 export function generateContent(queryType: QueryType, params: Record<string, string> = {}): string {

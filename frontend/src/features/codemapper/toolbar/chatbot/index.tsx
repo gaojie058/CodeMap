@@ -33,7 +33,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer, context
   const [chats, setChats] = useState<ChatMessage[]>(initialMessage);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
-  const {fnCallDOT, fnCallSelectedNode, bizCompDOT, bizCompSelectedNode} = useStore();
+  const {funcDot, funcSelectedNode, bizDot, bizSelectedNode} = useStore();
 
   useEffect(() => {
     chatService.initializeThread();
@@ -42,9 +42,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer, context
   const customizeMessage = (message: string): string => {
     let customContent = '';
     if(context === 'FUNCTION_CALL') {
-      customContent = `${fnCallDOT} selectedNode: ${fnCallSelectedNode}`
+      customContent = `${funcDot} selectedNode: ${funcSelectedNode}`
     } else if (context === 'BUSINESS') {
-      customContent = `${bizCompDOT} selectedNode: ${bizCompSelectedNode}`
+      customContent = `${bizDot} selectedNode: ${bizSelectedNode}`
     }
     const customMessage = `${customContent} ${message}`;
     return customMessage;
@@ -81,7 +81,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ toggleChatbotContainer, context
       });
     } catch (error) {
       console.error(error);
-      // 可以在这里添加错误处理逻辑，比如显示错误消息
+      // add error handling logic here
     } finally {
       setIsTyping(false);
     }

@@ -1,11 +1,10 @@
-// src/gpt/gptAssistant.ts
-
+import { API_KEY } from './api';
 import { prompts, PromptName } from './prompts';
 
-const apiKey = 'sk-REDACTED';
+const apiKey = API_KEY;
 const apiBase = "https://api.openai.com/v1";
 
-// 缓存机制
+// Caching Mechanisms
 let cachedAssistantId: string | null = null;
 const threadCache: Map<string, string> = new Map();
 
@@ -160,7 +159,7 @@ export async function useAssistant(promptName: PromptName, content: string): Pro
     let runStatus;
     let retryCount = 0;
     const maxRetries = 10;
-    let delay = 1000; // 初始延迟 1 秒
+    let delay = 1000; // Initial delay of 1 second
 
     while (retryCount < maxRetries) {
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -177,7 +176,7 @@ export async function useAssistant(promptName: PromptName, content: string): Pro
         }
 
         retryCount++;
-        delay = Math.min(delay * 2, 30000); // 指数退避，最大延迟 30 秒
+        delay = Math.min(delay * 2, 30000); // Exponential backoff, maximum delay of 30 seconds
     }
 
     if (retryCount >= maxRetries) {

@@ -1,7 +1,8 @@
 import OpenAI from 'openai';
+import { API_KEY } from '../api';
 
 const openai = new OpenAI({
-  apiKey: 'sk-REDACTED'
+  apiKey: API_KEY
 });
 
 const assistantId = 'asst_afppI9S4O6Jbwz513XYAyEmH';
