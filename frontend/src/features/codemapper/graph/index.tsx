@@ -20,8 +20,8 @@ export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({
 }) => {
   const graphRef = useRef<HTMLDivElement | null>(null);
 
-  const { toolbarContext, isToolbarOpen, setIsToolbarOpen } = useToolbarStore();
-  const { setBizCompSelectedNode, setFnCallSelectedNode } = useStore();
+  const { setIsToolbarOpen } = useToolbarStore();
+  const { setBizSelectedNode, setFuncSelectedNode } = useStore();
 
   const [hasError, setHasError] = useState<Boolean>(true);
 
@@ -41,9 +41,9 @@ export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({
     const label = labelElement?.textContent || '';
     setIsToolbarOpen(true, 'local');
     if (understanding === 'businesscomponent') {
-      setBizCompSelectedNode(label);
+      setBizSelectedNode(label);
     } else if (understanding === 'functioncall') {
-      setFnCallSelectedNode(label);
+      setFuncSelectedNode(label);
     }
   }, []);
 
@@ -60,8 +60,6 @@ export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({
         const graphContainer = graphRef.current;
 
         if (!dotData) return;
-
-        console.debug('dot', dotData);
 
         if (hasError) setHasError(false);
 

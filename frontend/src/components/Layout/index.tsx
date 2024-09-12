@@ -1,5 +1,4 @@
 import React from 'react';
-import Sidebar from './Sidebar';
 import { Header } from './Header';
 import styled from '@emotion/styled';
 import { Route, Routes } from 'react-router-dom';

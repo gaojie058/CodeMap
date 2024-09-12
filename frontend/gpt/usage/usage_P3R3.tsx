@@ -1,5 +1,3 @@
-// src/gpt/usage_businessComponentFlow.tsx
-
 import React, { useState } from 'react';
 import { GptComponent } from '../GptComponent';
 
@@ -8,7 +6,7 @@ const BusinessComponentFlow: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 触发重新渲染 GptComponent
+    // Trigger a re-render of GptComponent
   };
 
   return (

@@ -1,10 +1,9 @@
-// frontend/gpt/chatService.ts
-
 import OpenAI from 'openai';
+import { API_KEY } from './api';
 
 const openai = new OpenAI({
-  apiKey: "sk-REDACTED",
-  dangerouslyAllowBrowser: true // 仅用于开发/测试
+  apiKey: API_KEY,
+  dangerouslyAllowBrowser: true // For development/testing purposes only
 });
 
 // const assistantId = "asst_1rm5Iq7odQeJcMwC8sCbAzx3";//task1
@@ -53,7 +52,7 @@ class ChatService {
           reject(error);
         })
         .on('end', () => {
-          // 确保在流结束时解析 Promise
+          // Ensure the Promise is resolved at the end of the stream
           resolve(assistantResponse);
         });
     });

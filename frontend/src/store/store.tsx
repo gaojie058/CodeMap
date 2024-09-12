@@ -1,62 +1,78 @@
 import { create } from "zustand";
 
 interface State {
-  bizCompDOT: string | null;
-  bizGlobalUnderstanding: string | null;
-  bizCompLocalDOT: string | null;
-  bizCompLocalHighlightFlow: string | null;
-  bizCompLocalRelevantFlow: string | null;
-  bizCompSelectedNode: string | null;
+  bizDot: string | null;
+  bizGlobal: any | null;
+  bizLocalDot: string | null;
+  bizLocalHighlight: any | null;
+  bizLocalRelevant: any | null;
+  bizSelectedNode: string | null;
+  isBizLoading: boolean;
+  isBizLocalLoading: boolean;
 
-  fnCallDOT: string | null;
-  fnGlobalUnderstanding: string | null;
-  fnCallLocalDOT: string | null;
-  fnCallLocalHighlightFlow: string | null;
-  fnCallLocalRelevantFlow: string | null;
-  fnCallSelectedNode: string | null;
+  funcDot: string | null;
+  funcGlobal: any | null;
+  funcLocalDot: string | null;
+  funcLocalHighlight: any | null;
+  funcLocalRelevant: any | null;
+  funcSelectedNode: string | null;
+  isFuncLoading: boolean;
+  isFuncLocalLoading: boolean;
 
-  setBizCompDOT: (dot: string | null) => void;
-  setBizGlobalUnderstanding: (text: string | null) => void;
-  setBizCompLocalDOT: (dot: string | null) => void;
-  setBizCompLocalHighlightFlow: (text: string | null) => void;
-  setBizCompLocalRelevantFlow: (text: string | null) => void;
-  setBizCompSelectedNode: (text: string | null) => void;
+  setbizDot: (dot: string | null) => void;
+  setBizGlobal: (text: string | null) => void;
+  setBizLocalDot: (dot: string | null) => void;
+  setBizLocalHighlight: (text: string | null) => void;
+  setBizLocalRelevant: (text: string | null) => void;
+  setBizSelectedNode: (text: string | null) => void;
+  setIsBizLoading: (loading: boolean) => void;
+  setIsBizLocalLoading: (loading: boolean) => void;
 
-  setFnCallDOT: (dot: string | null) => void;
-  setFnCallLocalDOT: (dot: string | null) => void;
-  setFnGlobalUnderstanding: (text: string | null) => void;
-  setFnCallLocalHighlightFlow: (text: string | null) => void;
-  setFnCallLocalRelevantFlow: (text: string | null) => void;
-  setFnCallSelectedNode: (text: string | null) => void;
+  setFuncDot: (dot: string | null) => void;
+  setFuncLocalDot: (dot: string | null) => void;
+  setFuncGlobal: (text: string | null) => void;
+  setFuncLocalHighlight: (text: string | null) => void;
+  setFuncLocalRelevant: (text: string | null) => void;
+  setFuncSelectedNode: (text: string | null) => void;
+  setIsFuncLoading: (loading: boolean) => void;
+  setIsFuncLocalLoading: (loading: boolean) => void;
 }
 const useStore = create<State>((set) => ({
-  bizCompDOT: null,
-  bizGlobalUnderstanding: null,
-  bizCompLocalDOT: null,
-  bizCompLocalHighlightFlow: null,
-  bizCompLocalRelevantFlow: null,
-  bizCompSelectedNode: null,
+  bizDot: null,
+  bizGlobal: null,
+  bizLocalDot: null,
+  bizLocalHighlight: null,
+  bizLocalRelevant: null,
+  bizSelectedNode: null,
+  isBizLoading: false,
+  isBizLocalLoading: false,
 
-  fnCallDOT: null,
-  fnGlobalUnderstanding: null,
-  fnCallLocalDOT: null,
-  fnCallLocalHighlightFlow: null,
-  fnCallLocalRelevantFlow: null,
-  fnCallSelectedNode: null,
+  funcDot: null,
+  funcGlobal: null,
+  funcLocalDot: null,
+  funcLocalHighlight: null,
+  funcLocalRelevant: null,
+  funcSelectedNode: null,
+  isFuncLoading: false,
+  isFuncLocalLoading: false,
 
-  setBizCompDOT: (dot) => set({ bizCompDOT: dot }),
-  setBizGlobalUnderstanding: (text) => set({ bizGlobalUnderstanding: text }),
-  setBizCompLocalDOT: (dot) => set({ bizCompLocalDOT: dot }),
-  setBizCompLocalHighlightFlow: (text) => set({ bizCompLocalHighlightFlow: text }),
-  setBizCompLocalRelevantFlow: (text) => set({ bizCompLocalRelevantFlow: text }),
-  setBizCompSelectedNode: (text) => set({ bizCompSelectedNode: text }),
+  setbizDot: (dot) => set({ bizDot: dot }),
+  setBizGlobal: (text) => set({ bizGlobal: text }),
+  setBizLocalDot: (dot) => set({ bizLocalDot: dot }),
+  setBizLocalHighlight: (text) => set({ bizLocalHighlight: text }),
+  setBizLocalRelevant: (text) => set({ bizLocalRelevant: text }),
+  setBizSelectedNode: (text) => set({ bizSelectedNode: text }),
+  setIsBizLoading: (loading) => set({ isBizLoading: loading }),
+  setIsBizLocalLoading: (loading) => set({ isBizLocalLoading: loading }),
 
-  setFnCallDOT: (dot) => set({ fnCallDOT: dot }),
-  setFnGlobalUnderstanding: (text) => set({ fnGlobalUnderstanding: text }),
-  setFnCallLocalDOT: (dot) => set({ fnCallLocalDOT: dot }),
-  setFnCallLocalHighlightFlow: (text) => set({ fnCallLocalHighlightFlow: text }),
-  setFnCallLocalRelevantFlow: (text) => set({ fnCallLocalRelevantFlow: text }),
-  setFnCallSelectedNode: (text) => set({ fnCallSelectedNode: text }),
+  setFuncDot: (dot) => set({ funcDot: dot }),
+  setFuncGlobal: (text) => set({ funcGlobal: text }),
+  setFuncLocalDot: (dot) => set({ funcLocalDot: dot }),
+  setFuncLocalHighlight: (text) => set({ funcLocalHighlight: text }),
+  setFuncLocalRelevant: (text) => set({ funcLocalRelevant: text }),
+  setFuncSelectedNode: (text) => set({ funcSelectedNode: text }),
+  setIsFuncLoading: (loading) => set({ isFuncLoading: loading }),
+  setIsFuncLocalLoading: (loading) => set({ isFuncLocalLoading: loading }),
 }));
 
 export default useStore;

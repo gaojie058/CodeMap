@@ -8,7 +8,7 @@ const App: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 这里可以添加额外的逻辑，比如验证输入等
+    // Additional logic can be added here, such as input validation
   };
 
   return (

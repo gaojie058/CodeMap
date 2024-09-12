@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
+import { API_KEY } from '../api';
 
-const apiKey = 'sk-REDACTED';
+const apiKey = API_KEY;
 const apiBase = "https://api.openai.com/v1";
 
 async function makeRequest(endpoint, method = 'GET', body = null) {

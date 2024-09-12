@@ -17,7 +17,7 @@ interface ToolbarProps {
   type: UnderstandingType;
 }
 const Toolbar: React.FC<ToolbarProps> = ({ isOpen, onClose, type }) => {
-  const { bizCompSelectedNode, fnCallSelectedNode } = useStore();
+  const { bizSelectedNode, funcSelectedNode } = useStore();
   const { toolbarContext, setToolbarContext } = useToolbarStore();
   const [selectedIndex, setSelectedIndex] = useState<number>(
     toolbarContext === 'local' ? 1 : 0
@@ -42,14 +42,14 @@ const Toolbar: React.FC<ToolbarProps> = ({ isOpen, onClose, type }) => {
             <TabPanel>
               <div
                 className={`text-xs p-[2px] rounded-md mb-4 ${
-                  bizCompSelectedNode
+                  bizSelectedNode
                     ? 'bg-gradient-to-r from-[#2889CC] to-[#24AE63]'
                     : 'bg-gray-200'
                 }`}
               >
                 <div className='rounded-[calc(.375rem-2px)] p-2 bg-white text-center'>
-                  {bizCompSelectedNode ? (
-                    <>Selected Node: {bizCompSelectedNode}</>
+                  {bizSelectedNode ? (
+                    <>Selected Node: {bizSelectedNode}</>
                   ) : (
                     <>Please select a node.</>
                   )}
@@ -68,14 +68,14 @@ const Toolbar: React.FC<ToolbarProps> = ({ isOpen, onClose, type }) => {
             <TabPanel>
               <div
                 className={`text-xs p-[2px] rounded-md mb-4 ${
-                  fnCallSelectedNode
+                  funcSelectedNode
                     ? 'bg-gradient-to-r from-[#2889CC] to-[#24AE63]'
                     : 'bg-gray-200'
                 }`}
               >
                 <div className='rounded-[calc(.375rem-2px)] p-2 bg-white text-center'>
-                  {fnCallSelectedNode ? (
-                    <>Selected Node: {fnCallSelectedNode}</>
+                  {funcSelectedNode ? (
+                    <>Selected Node: {funcSelectedNode}</>
                   ) : (
                     <>Please select a node.</>
                   )}
