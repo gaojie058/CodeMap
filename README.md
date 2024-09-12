@@ -59,7 +59,7 @@ src/
 
 ## Tech Stack
 
-**Client:** React, Redux, TailwindCSS, NodeJS
+**Client:** React, TailwindCSS, NodeJS
 
 **Server:** No server side code
 
