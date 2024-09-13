@@ -76,11 +76,6 @@ const FnLocalUnderstanding: React.FC = () => {
     relevantFlow: null,
   });
 
-  // loading states
-  // const [isLocalmapLoading, setIsLocalmapLoading] = useState<boolean>(false);
-  // const [isHighlightedExpLoading, setIsHighlightedExpLoading] = useState<boolean>(false);
-  // const [isRelevantExpLoading, setIsRelevantExpLoading] = useState<boolean>(false);
-
   const resetResponses = () => {
     setResponses({
       graph: null,
@@ -141,20 +136,6 @@ const FnLocalUnderstanding: React.FC = () => {
   const handleLoadingChange = useCallback((isLoading: boolean) => {
     setIsFuncLocalLoading(isLoading);
   }, []);
-
-  // gpt loading status handlers
-  // const handleLocalMapLoadingChange = (loading: boolean) => {
-  //   setIsLocalmapLoading(loading);
-  //   setIsFuncLocalLoading(loading);
-  // }
-  // const handleHighlightedExpLoadingChange = (loading: boolean) => {
-  //   setIsHighlightedExpLoading(loading);
-  //   setIsFuncLocalLoading(loading);
-  // }
-  // const handleRelevantExpLoadingChange = (loading: boolean) => {
-  //   setIsRelevantExpLoading(loading);
-  //   setIsFuncLocalLoading(loading);
-  // }
 
   useEffect(() => {
     if (funcLocalDot && !responses.graph) {
@@ -224,7 +205,7 @@ const FnLocalUnderstanding: React.FC = () => {
       </div>
 
 
-      {funcSelectedNode && !funcLocalDot && !isFuncLocalLoading && (
+        {funcSelectedNode && !funcLocalDot && !isFuncLocalLoading && (
           <GptComponent
             queryType='P9_R9_functionCallFlow'
             params={{ selectedNode: funcSelectedNode }}

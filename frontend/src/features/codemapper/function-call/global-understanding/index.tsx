@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useStore from '@/store/store';
 import { GptComponent } from '@gpt/GptComponent';
 import { ArrowPathIcon } from '@heroicons/react/16/solid';
 import Spinner from '@/components/Elements/Spinner/Spinner';
 import IconButton from '@/components/Elements/Button/IconButton';
 import DisclosureItem from '@/components/DisclosureItem/DisclosureItem';
+import { extractJsonFromText } from '@/utils/extract';
 
 const understandings = [
   { name: 'Overview', key: 'Overview', value: '' },
@@ -38,17 +39,23 @@ const renderDisclosureItems = (items: any[]) => {
 
 const FnGlobalUnderstanding: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const { funcGlobal, setFuncGlobal } = useStore();
 
-  // const handleResponse = (res: string | null) => {
-  //   if (res) {
-  //     const jsonData = extractJsonFromText(res);
-  //     console.log('Global understanding:', jsonData);
-  //     setFuncGlobal(jsonData);
-  //   }
-  // };
+  const handleResponseReceived = useCallback(
+    (receivedResponse: string | null, receivedError?: string | null) => {
+      if (receivedResponse) {
+        const jsonResponse = extractJsonFromText(receivedResponse);
+        setFuncGlobal(jsonResponse);
+      }
+      if (receivedError) setError(receivedError);
+    },
+    []
+  );
 
-  // const handleLoadingChange = (loading: boolean) => setLoading(loading);
+  const handleLoadingChange = useCallback((isLoading: boolean) => {
+    setLoading(isLoading);
+  }, []);
 
   useEffect(() => {
     if (funcGlobal) {
@@ -64,6 +71,7 @@ const FnGlobalUnderstanding: React.FC = () => {
         disabled={!funcGlobal && loading}
         className='ml-auto'
       />
+      {error && <div>Error: {error}</div>}
       <div className='mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl'>
         {!funcGlobal && loading ? (
           <Spinner
@@ -73,15 +81,14 @@ const FnGlobalUnderstanding: React.FC = () => {
         ) : (
           <>{renderDisclosureItems(understandings)}</>
         )}
-
-        {/* {!funcGlobal && (
-          <GptComponent
-            queryType='P7_R7_projectStructureJson'
-            onResponseReceived={handleResponse}
-            onLoadingChange={handleLoadingChange}
-          />
-        )} */}
       </div>
+      {!loading && !funcGlobal && (
+        <GptComponent
+          queryType='P7_R7_projectStructureJson'
+          onResponseReceived={handleResponseReceived}
+          onLoadingChange={handleLoadingChange}
+        />
+      )}
     </>
   );
 };

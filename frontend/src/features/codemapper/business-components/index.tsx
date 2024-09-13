@@ -10,7 +10,7 @@ import Spinner from '@/components/Elements/Spinner/Spinner';
 import { extractDotContent, extractJsonFromText } from '@/utils/extract';
 
 const BusinessComponents: React.FC = () => {
-  const { bizDot, isBizLoading, setbizDot, setBizGlobal, setIsBizLoading } = useStore();
+  const { bizDot, bizGlobal, isBizLoading, setbizDot, setBizGlobal, setIsBizLoading } = useStore();
   const { isToolbarOpen, toggleToolbar } = useToolbarStore();
 
   const [error, setError] = useState<string | null>(null);
@@ -23,13 +23,13 @@ const BusinessComponents: React.FC = () => {
         const dotResponse = extractDotContent(receivedResponse);
         setResponse(dotResponse);
         setbizDot(dotResponse);
-        setBizGlobal(jsonResponse);
+        if(!bizGlobal) setBizGlobal(jsonResponse);
       } else {
         setResponse(null);
       }
       if (receivedError) setError(receivedError);
     },
-    []
+    [bizGlobal]
   );
 
   const handleLoadingChange = useCallback((isLoading: boolean) => {

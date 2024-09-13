@@ -10,7 +10,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { extractDotContent, extractJsonFromText } from '@/utils/extract';
 
 const FunctionCall: React.FC = () => {
-  const { funcDot, isFuncLoading, setFuncDot, setFuncGlobal, setIsFuncLoading } = useStore();
+  const { funcDot, funcGlobal, isFuncLoading, setFuncDot, setFuncGlobal, setIsFuncLoading } = useStore();
   const { isToolbarOpen, toggleToolbar } = useToolbarStore();
 
   const [error, setError] = useState<string | null>(null);
@@ -23,14 +23,13 @@ const FunctionCall: React.FC = () => {
         const dotResponse = extractDotContent(receivedResponse);
         setResponse(dotResponse);
         setFuncDot(dotResponse);
-        setFuncGlobal(jsonResponse);
-        setIsFuncLoading(false);
+        if(!funcGlobal) setFuncGlobal(jsonResponse);
       } else {
         setResponse(null);
       }
       if (receivedError) setError(receivedError);
     },
-    []
+    [funcGlobal]
   );
 
   const handleLoadingChange = useCallback((isLoading: boolean) => {
