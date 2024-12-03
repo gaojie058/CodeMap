@@ -17,7 +17,6 @@ const MainContainer = styled.div`
   width: 100%;
   height: 100vh;
   container-name: multi-select-container;
-  container-type: inline-size;
   overflow-x: hidden;
   overflow-y: hidden;
 `;
