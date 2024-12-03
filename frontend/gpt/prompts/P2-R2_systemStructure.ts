@@ -7,7 +7,7 @@ export const systemStructurePrompt = {
   2. annotate the purpose of each edge
   3. using "components: (component description)" to show the main component names
   4. output important functions, variables, and file path
-  5. show the business relationship and business flow between components in detail
+  5. show the business relationship and business flow between components in detail, e.g., "Module A manages Module B", where Module A (usually bigger) is the start of the arrow and module B (usually smaller) is the end of the arrow.
   6. Use color_palette = ["#a9a9a9", "#ffd79d", "#e4b0b0",  "#f7bfbf",  "#d5d4f0",  "#cbe7f2",  "#d3f0d3" ]
 
   
@@ -41,7 +41,7 @@ node [color="#e3f2fa"]  // slightly lighter blue
 M2_Component1 [label=<<b>Component 2.1</b><br/><br/>File:path/to/filename<br/>Key Functions: function1(), function2()..<br/>Key Variables: A, B...>]
 M2_Component2 [label=<<b>Component 2.2</b><br/><br/>File:path/to/filename<br/>Key Functions: function1(), function2()..<br/>Key Variables: A, B...>]
 
-M2_Component1 -> M2_Component2 [label="relation"]
+M2_Component1 -> M2_Component2 [label="M2_Component1 xxxx for M2_Component2"]
 }
 
 // module3
@@ -54,7 +54,7 @@ node [color="#ebeafa"]  // slightly lighter lavender
 M3_Component1 [label=<<b>Component 3.1</b><br/><br/>File:path/to/filename<br/>Key Functions: function1(), function2()..<br/>Key Variables: A, B...>]
 M3_Component2 [label=<<b>Component 3.2</b><br/><br/>File:path/to/filename<br/>Key Functions: function1(), function2()..<br/>Key Variables: A, B...>]
 
-M3_Component1 -> M3_Component2 [label="relation"]
+M3_Component1 -> M3_Component2 [label="M3_Component1 xxxx for M3_Component2"]
 }
 
 // module4
@@ -67,7 +67,7 @@ node [color="#e3f2fa"]  // slightly lighter blue
 M4_Component1 [label=<<b>Component 4.1</b><br/><br/>File:path/to/filename<br/>Key Functions: function1(), function2()..<br/>Key Variables: A, B...>]
 M4_Component2 [label=<<b>Component 4.2</b><br/><br/>File:path/to/filename<br/>Key Functions: function1(), function2()..<br/>Key Variables: A, B...>]
 
-M4_Component1 -> M4_Component2 [label="relation"]
+M4_Component1 -> M4_Component2 [label="M4_Component1 xxxx for M4_Component2"]
 }
 
 // module relationship

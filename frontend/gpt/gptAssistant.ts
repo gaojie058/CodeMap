@@ -56,7 +56,7 @@ async function updateAssistant(assistantId: string) {
 export async function useAssistant(promptName: PromptName, content: string): Promise<string> {
 
     // const assistantId = "asst_1rm5Iq7odQeJcMwC8sCbAzx3"//task1
-    const assistantId= "asst_cj2CTaMuDQxc7l4YA3UtZ3nX"//task2
+    const assistantId= "asst_eZnQNP4eRvWUY3QPk1dlB2eK"//task2
     console.log(`Using assistant ${assistantId}...`);
     
     const cacheKey = `${promptName}:${content}`;
@@ -143,6 +143,10 @@ export async function useAssistant(promptName: PromptName, content: string): Pro
     views.py
     wrappers.py
     `;
+    // Task1
+    // const combinedContent = `${filepath_task1}\n\n${prompts[promptName].content}\n\nUser Content: ${content}`;    console.log('Combined content:', combinedContent);
+
+    // Task2
     const combinedContent = `${filepath_task2}\n\n${prompts[promptName].content}\n\nUser Content: ${content}`;    console.log('Combined content:', combinedContent);
 
     const message = await makeRequest(`/threads/${threadId}/messages`, 'POST', {
