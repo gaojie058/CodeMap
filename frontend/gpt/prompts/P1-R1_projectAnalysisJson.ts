@@ -15,7 +15,7 @@ export const projectAnalysisJsonPrompt = {
   Output like the following json example:
   {
   "project_overview":"....(in one sentence, expand the sentence to describe the project)",
-  名词解释
+ term explanation
   "project_structure": {
   "xxxxx.xxxx": "description"
   ...

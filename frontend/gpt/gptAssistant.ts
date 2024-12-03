@@ -1,5 +1,7 @@
 import { API_KEY } from './api';
 import { prompts, PromptName } from './prompts';
+import { assistantId } from './api'
+import { filepath } from './api';
 
 const apiKey = API_KEY;
 const apiBase = "https://api.openai.com/v1";
@@ -56,8 +58,8 @@ async function updateAssistant(assistantId: string) {
 export async function useAssistant(promptName: PromptName, content: string): Promise<string> {
 
     // const assistantId = "asst_1rm5Iq7odQeJcMwC8sCbAzx3"//task1
-    const assistantId= "asst_eZnQNP4eRvWUY3QPk1dlB2eK"//task2
-    console.log(`Using assistant ${assistantId}...`);
+    // const assistantId= "asst_eZnQNP4eRvWUY3QPk1dlB2eK"//task2
+    // console.log(`Using assistant ${assistantId}...`);
     
     const cacheKey = `${promptName}:${content}`;
     let threadId = threadCache.get(cacheKey);
@@ -70,84 +72,84 @@ export async function useAssistant(promptName: PromptName, content: string): Pro
     } else {
         console.log("Using cached thread:", threadId);
     }
-    const filepath_task1 = `Here is all the file in the vector store:
-    dependencies
-    dependencies/models.py
-    dependencies/utils.py
-    middleware
-    middleware/cors.py
-    middleware/gzip.py
-    middleware/httpsredirect.py
-    middleware/trustedhost.py
-    middleware/wsgi.py
-    openapi
-    openapi/constants.py
-    openapi/docs.py
-    openapi/models.py
-    openapi/utils.py
-    security
-    security/api_key.py
-    security/base.py
-    security/http.py
-    security/oauth2.py
-    security/open_id_connect_url.py
-    security/utils.py
-    applications.py
-    background.py
-    cli.py
-    concurrency.py
-    datastructures.py
-    encoders.py
-    exception_handlers.py
-    exceptions.py
-    logger.py
-    param_functions.py
-    params.py
-    project_structure.md
-    py.typed
-    requests.py
-    responses.py
-    routing.py
-    staticfiles.py
-    templating.py
-    testclient.py
-    types.py
-    utils.py
-    websockets.py
-    _compat.py
-    `;
-    const filepath_task2 = `Here is all the file in the vector store:
-    json
-    json/provider.py
-    json/tag.py
-    sansio
-    sansio/app.py
-    sansio/blueprints.py
-    sansio/README.md
-    sansio/scaffold.py
-    app.py
-    blueprints.py
-    cli.py
-    config.py
-    ctx.py
-    debughelpers.py
-    globals.py
-    helpers.py
-    logging.py
-    py.typed
-    sessions.py
-    signals.py
-    templating.py
-    testing.py
-    typing.py
-    views.py
-    wrappers.py
-    `;
-    // Task1
-    // const combinedContent = `${filepath_task1}\n\n${prompts[promptName].content}\n\nUser Content: ${content}`;    console.log('Combined content:', combinedContent);
+    // const filepath_task1 = `Here is all the file in the vector store:
+    // dependencies
+    // dependencies/models.py
+    // dependencies/utils.py
+    // middleware
+    // middleware/cors.py
+    // middleware/gzip.py
+    // middleware/httpsredirect.py
+    // middleware/trustedhost.py
+    // middleware/wsgi.py
+    // openapi
+    // openapi/constants.py
+    // openapi/docs.py
+    // openapi/models.py
+    // openapi/utils.py
+    // security
+    // security/api_key.py
+    // security/base.py
+    // security/http.py
+    // security/oauth2.py
+    // security/open_id_connect_url.py
+    // security/utils.py
+    // applications.py
+    // background.py
+    // cli.py
+    // concurrency.py
+    // datastructures.py
+    // encoders.py
+    // exception_handlers.py
+    // exceptions.py
+    // logger.py
+    // param_functions.py
+    // params.py
+    // project_structure.md
+    // py.typed
+    // requests.py
+    // responses.py
+    // routing.py
+    // staticfiles.py
+    // templating.py
+    // testclient.py
+    // types.py
+    // utils.py
+    // websockets.py
+    // _compat.py
+    // `;
+    // const filepath_task2 = `Here is all the file in the vector store:
+    // json
+    // json/provider.py
+    // json/tag.py
+    // sansio
+    // sansio/app.py
+    // sansio/blueprints.py
+    // sansio/README.md
+    // sansio/scaffold.py
+    // app.py
+    // blueprints.py
+    // cli.py
+    // config.py
+    // ctx.py
+    // debughelpers.py
+    // globals.py
+    // helpers.py
+    // logging.py
+    // py.typed
+    // sessions.py
+    // signals.py
+    // templating.py
+    // testing.py
+    // typing.py
+    // views.py
+    // wrappers.py
+    // `;
+    // // Task1
+    // // const combinedContent = `${filepath_task1}\n\n${prompts[promptName].content}\n\nUser Content: ${content}`;    console.log('Combined content:', combinedContent);
 
-    // Task2
-    const combinedContent = `${filepath_task2}\n\n${prompts[promptName].content}\n\nUser Content: ${content}`;    console.log('Combined content:', combinedContent);
+    // // Task2
+    const combinedContent = `${filepath}\n\n${prompts[promptName].content}\n\nUser Content: ${content}`;    console.log('Combined content:', combinedContent);
 
     const message = await makeRequest(`/threads/${threadId}/messages`, 'POST', {
         role: "user",

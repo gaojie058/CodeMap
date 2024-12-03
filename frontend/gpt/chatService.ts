@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { API_KEY } from './api';
+import { assistantId } from './api'
 
 const openai = new OpenAI({
   apiKey: API_KEY,
@@ -7,7 +8,8 @@ const openai = new OpenAI({
 });
 
 // const assistantId = "asst_1rm5Iq7odQeJcMwC8sCbAzx3";//task1
-const assistantId= "asst_cj2CTaMuDQxc7l4YA3UtZ3nX"//task2
+
+// const assistantId= "asst_eZnQNP4eRvWUY3QPk1dlB2eK"//task2
 
 class ChatService {
   private threadId: string | null = null;
