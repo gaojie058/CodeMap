@@ -9,8 +9,10 @@ const CURRENT_ASSISTANT = import.meta.env.VITE_CURRENT_ASSISTANT || '';
 // Determine the active assistant
 export const assistantId = (() => {
     if (CURRENT_ASSISTANT.toLowerCase() === 'fastapi') {
+        console.log("Setting assistantId: Current assistant will be fastapi")
         return ASSISTANT_FASTAPI;
     } else if (CURRENT_ASSISTANT.toLowerCase() === 'flask') {
+        console.log("Setting assistantId: Current assistant will be flask")
         return ASSISTANT_FLASK;
     } else {
         throw new Error("Invalid value for assistantId & CURRENT_ASSISTANT. Must be 'fastapi' or 'flask'.");
@@ -28,8 +30,10 @@ const FILE_PATH_FLASK = import.meta.env.VITE_FILE_PATH_FLASK
 // Determine the active assistant
 export const filepath = (() => {
     if (CURRENT_ASSISTANT.toLowerCase() === 'fastapi') {
+        console.log("Setting filepath: Current path will be fastapi")
         return FILE_PATH_FASTAPI;
     } else if (CURRENT_ASSISTANT.toLowerCase() === 'flask') {
+        console.log("Setting filepath: Current path will be flask")
         return FILE_PATH_FLASK;
     } else {
         throw new Error("Invalid value for filepath & CURRENT_ASSISTANT. Must be 'fastapi' or 'flask'.");
