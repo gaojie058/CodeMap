@@ -30,7 +30,7 @@ const Slideover: React.FC<SlideoverProps> = ({
       leaveTo='translate-x-full'
     >
       <div
-        className='fixed right-0 top-0 h-full w-[478px] bg-white shadow-lg flex flex-col p-4 z-40'
+        className='fixed right-0 top-15 h-full w-[478px] bg-white shadow-lg flex flex-col p-4 z-40'
         aria-modal='true'
         role='dialog'
         ref={initialFocus}
