@@ -4,8 +4,6 @@ export const systemStructureDotPrompt = {
   name: 'systemStructureDot',
   content: `
 
-
-
 Analyze this project based on the vector store and provide the following information:
 
 1. A JSON format output containing:
@@ -15,6 +13,7 @@ Analyze this project based on the vector store and provide the following informa
 
 2. A DOT language graph representing the project structure and relationships.
 3. One module can contain multiple components
+
 For the JSON output:
 - Each description should be concise and easy to understand. 
 - Avoid technical jargon and complex explanations. 
@@ -22,6 +21,7 @@ For the JSON output:
 
 For the DOT graph:
 - Use the dot language to create the graph.
+- There should be an entry point of the whole structure
 - Annotate the purpose of each edge.
 - Use "components: (component description)" to show the main component names.
 - Output important functions, variables, and file paths.
@@ -29,7 +29,6 @@ For the DOT graph:
 
 Ensure that:
 1. There is no duplication in the output content, and each JSON field contains unique information.
-2. The output paths related to files follow the information in the task1_filepath.md.
 3. The output includes all the files in the vector database, with no exceptions.
 4. The Modules scope must include all code in the file, you must not omit any Modules
 5. If the projectArchitectureGuide in the JSON output include a filename, the filename must output link with the module name， e.g., "starting from module x and its file xx to understand xxxxx"
@@ -66,11 +65,13 @@ Output the information in the following format, please provide both the JSON out
 2. DOT graph output (enclosed in \`\`\`dot \`\`\`)， must strictly following the few shot
 
 \`\`\`dot
-
-  digraph SystemStructure {
+digraph SystemStructure {
 
   node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10]
   edge [fontname="Helvetica", fontsize=8, fontcolor=gray30]
+
+  // Entry Point
+  EntryPoint [label=<<b>System Entry Point</b><br/>(description of entry point)>, shape=oval, style="filled", color="#f7d3d3"]
 
   // Module 1
   subgraph cluster_module1 {
@@ -104,8 +105,11 @@ Output the information in the following format, please provide both the JSON out
   // Optional external dependencies
   ExternalEntity [label=<<b>External Entity</b><br/>(if applicable)>, shape=ellipse, style=dashed]
   M1_Component2 -> ExternalEntity [label="external relation", style=dashed]
+
+  // Connect Entry Point to the starting component
+  EntryPoint -> M1_Component1 [label="initiates system flow"]
 }
-\`
+
 \`\`\`
   `
 };

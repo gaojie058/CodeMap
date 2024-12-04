@@ -4,6 +4,11 @@ export const inheritanceGraphPrompt = {
     name: 'inheritanceGraph',
     content: `Analyze the project, focus on the all above files, and return the following information:
 
+
+- The dot graph node design is optimized for universal applicability across most programming languages.
+- Relationships in the dot graph use line breaks if the output is too long.
+
+
 1. JSON format analysis:
 
 \`\`\`json

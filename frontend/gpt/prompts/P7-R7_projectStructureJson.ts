@@ -1,6 +1,22 @@
 export const projectStructureJsonPrompt = {
   name: 'projectStructureJson',
-  content: `Analyze the project, focus on the all above files, and return the following information:
+  content: `Based on the uploaded codebase, generate both the JSON analysis and the inheritance graph following these formats. Ensure that:
+
+1. The information in the dot graph aligns with the JSON.
+2. Class names are explicitly shown in the dot graph nodes as "ClassName.Class".
+3. Descriptions in the JSON are easily understandable by beginners.
+4. Class descriptions in the JSON concisely describe relationships with other classes.
+5. The dot graph node design is optimized for universal applicability across most programming languages.
+6. Ensure that the dot graph includes function-level details, specifies inheritance and other relationships between nodes, and includes class names, filenames, key functions, and key variables in each node. 
+7. There should be an entry point of the whole structure
+8. For inheritance relationships, specify which key functions and variables are inherited and the purpose of the inheritance.
+9. Relationships in the dot graph use line breaks if the output is too long.
+10. The "Relationships" section in the JSON provides a numbered list (starting from 0) describing the project flow, class interactions, function calls, data sharing, and purposes.
+11. your output must cover all the code and files I provided in prompt and vector store
+
+
+Output example:
+
 
 1. JSON format analysis:
 
@@ -88,17 +104,6 @@ digraph SystemStructure {
   ClassName4.Class -> ExternalClass [label="Depends on: ClassName4 uses ExternalClass\\nUsed functions: extFunc1, extFunc2\\nShared data: extVar1, extVar2\\nPurpose: (description of dependency purpose)", style=dashed]
 }
 \`\`\`
+`
 
-Based on the uploaded codebase, generate both the JSON analysis and the inheritance graph following these formats. Ensure that:
-
-1. The information in the dot graph aligns with the JSON.
-2. Class names are explicitly shown in the dot graph nodes as "ClassName.Class".
-3. Descriptions in the JSON are easily understandable by beginners.
-4. Class descriptions in the JSON concisely describe relationships with other classes.
-5. The dot graph node design is optimized for universal applicability across most programming languages.
-6. Relationships in the dot graph use line breaks if the output is too long.
-7. The "Relationships" section in the JSON provides a numbered list (starting from 0) describing the project flow, class interactions, function calls, data sharing, and purposes.
-8. your output must cover all the code and file I provided in prompt and vector store
-
-Ensure that the dot graph includes function-level details, specifies inheritance and other relationships between nodes, and includes class names, filenames, key functions, and key variables in each node. For inheritance relationships, specify which key functions and variables are inherited and the purpose of the inheritance.`,
 };
