@@ -22,3 +22,9 @@
   stroke: black;
   stroke-width: 2px;
 }
+
+#graph-container svg .cluster:hover path {
+  stroke: #000;
+  stroke-width: 2px;
+  cursor: pointer;
+}
