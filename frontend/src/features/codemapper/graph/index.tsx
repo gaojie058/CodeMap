@@ -54,6 +54,27 @@ export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({
     alert(`Edge label: ${label}`);
   }, []);
 
+  const handleComponentClick = useCallback((event: MouseEvent) => {
+    const target = event.currentTarget as SVGElement;
+
+    const previouslySelectedComponent =
+      graphRef.current?.querySelector('.highlighted');
+    if (previouslySelectedComponent) {
+      previouslySelectedComponent.classList.remove('highlighted');
+    }
+
+    target.classList.add('highlighted');
+
+    const labelElement = target.querySelector('text');
+    const label = labelElement?.textContent || '';
+    setIsToolbarOpen(true, 'local');
+    if (understanding === 'businesscomponent') {
+      setBizSelectedNode(label);
+    } else if (understanding === 'functioncall') {
+      setFuncSelectedNode(label);
+    }
+  }, [])
+
   useEffect(() => {
     const renderGraph = () => {
       if (graphRef.current) {
@@ -81,6 +102,11 @@ export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({
             edges.forEach((edge) => {
               edge.addEventListener('click', handleEdgeClick as EventListener);
             });
+
+            const components = graphContainer.querySelectorAll('g.cluster');
+            components.forEach((component) => {
+              component.addEventListener('click', handleComponentClick as EventListener);
+            });
           });
         } catch (error) {
           setHasError(true);
@@ -104,6 +130,11 @@ export const AnalysisGraph: React.FC<AnalysisGraphProps> = ({
         const edges = graphRef.current.querySelectorAll('g.edge');
         edges.forEach((edge) => {
           edge.removeEventListener('click', () => handleEdgeClick);
+        });
+
+        const components = graphRef.current.querySelectorAll('g.cluster');
+        components.forEach((component) => {
+          component.removeEventListener('click', () => handleComponentClick);
         });
       }
     };
