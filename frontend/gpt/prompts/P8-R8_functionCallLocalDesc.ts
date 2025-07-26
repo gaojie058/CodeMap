@@ -1,10 +1,7 @@
 export const functionCallLocalDescPrompt = {
   name: 'functionCallLocalDesc',
   content: `
-  
   Explain the details for the selcted node {selectedNode}. Provide the output in the following JSON format:
-
-
 {
   "highlightedInheritance": [
     {
