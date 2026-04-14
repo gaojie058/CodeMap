@@ -109,14 +109,19 @@
         }
 
         .header-icons a {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
+            gap: 6px;
             height: 40px;
-            border-radius: 50%;
+            padding: 0 14px;
+            border-radius: 20px;
             transition: transform 0.2s, box-shadow 0.2s;
             text-decoration: none;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         .header-icons a:hover {
@@ -130,6 +135,8 @@
             height: 18px;
             fill: #fff;
         }
+
+        .header-icons .icon-paper { color: var(--color-text-dark); }
 
         .header-icons .icon-arxiv { background: var(--color-red); }
         .header-icons .icon-code { background: var(--color-teal); }
@@ -155,6 +162,23 @@
             border-radius: 20px;
             padding: 5px 20px;
             margin-bottom: 24px;
+        }
+
+        .award-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #fff;
+            background: linear-gradient(135deg, #f4c430, #b8860b);
+            border-radius: 20px;
+            padding: 7px 22px;
+            margin: 0 0 20px;
+            box-shadow: 0 3px 10px rgba(184, 134, 11, 0.35);
         }
 
         .header h1 {
@@ -983,14 +1007,17 @@
     <div class="header-topbar">
         <div class="header-logo"><span class="highlight">Code</span>Map</div>
         <div class="header-icons">
-            <a href="https://arxiv.org/abs/2504.04553" target="_blank" class="icon-arxiv" title="arXiv">
+            <a href="https://arxiv.org/abs/2504.04553" target="_blank" class="icon-arxiv" title="Preprint on arXiv">
                 <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span>Preprint</span>
             </a>
-            <a href="https://github.com/gaojie058/code-map" target="_blank" class="icon-code" title="Code">
+            <a href="https://github.com/gaojie058/code-map" target="_blank" class="icon-code" title="GitHub Repository">
                 <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.85 1.24 1.85 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016.02 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.93.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                <span>GitHub</span>
             </a>
             <a href="https://doi.org/10.1145/3794763.3794822" target="_blank" class="icon-paper" title="ICPC '26 (Coming Soon)">
                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <span>Publication</span>
             </a>
         </div>
     </div>
@@ -1000,21 +1027,29 @@
         <div class="header-badge">Research Paper</div>
         <h1>Understanding Codebase<br>like a <span class="highlight">Professional!</span></h1>
         <div class="subtitle">Human-AI Collaboration for Code Comprehension</div>
+        <div class="award-badge">
+            <span>&#127942;</span>
+            <span>ACM SIGSOFT Distinguished Paper Award</span>
+        </div>
 
         <!-- Authors -->
         <div style="margin-bottom:12px; font-size:0.95rem; line-height:1.8; color:var(--color-text-dark);">
-            <a href="https://gaojie058.github.io/" target="_blank">Jie Gao</a><sup style="color:var(--color-text-light);font-size:0.7em;">1</sup>,
+            <a href="https://gaojie058.github.io/" target="_blank">Jie Gao</a><sup style="color:var(--color-text-light);font-size:0.7em;">1,5,*</sup>,
             <a href="https://bradmoonuestc.github.io/" target="_blank">Yue Xue</a><sup style="color:var(--color-text-light);font-size:0.7em;">2</sup>,
             <a href="https://xiaofeixie.bitbucket.io/" target="_blank">Xiaofei Xie</a><sup style="color:var(--color-text-light);font-size:0.7em;">3</sup>,
             <a href="https://jamescao2048.github.io/" target="_blank">Junming Cao</a><sup style="color:var(--color-text-light);font-size:0.7em;">4</sup>,
             <a href="https://www.smthant.com/" target="_blank">SoeMin Thant</a><sup style="color:var(--color-text-light);font-size:0.7em;">5</sup>,
-            Erika Lee<sup style="color:var(--color-text-light);font-size:0.7em;">6</sup>,
+            Erika Lee<sup style="color:var(--color-text-light);font-size:0.7em;">5,6,&#8224;</sup>,
             <a href="https://www.bowenxu.me/" target="_blank">Bowen Xu</a><sup style="color:var(--color-text-light);font-size:0.7em;">7</sup>
         </div>
 
         <!-- Affiliations bar -->
         <div class="affiliations-bar">
             <span><sup>1</sup>Johns Hopkins University</span><span class="dot">&middot;</span><span><sup>2</sup>Metatrust Labs</span><span class="dot">&middot;</span><span><sup>3</sup>Singapore Management University</span><span class="dot">&middot;</span><span><sup>4</sup>Fudan University</span><br><span><sup>5</sup>Singapore-MIT Alliance for Research and Technology</span><span class="dot">&middot;</span><span><sup>6</sup>UC San Diego</span><span class="dot">&middot;</span><span><sup>7</sup>NC State</span>
+        </div>
+        <div style="margin-top:10px; font-size:0.7rem; color:var(--color-text-light); font-style:italic; line-height:1.5;">
+            <sup>*</sup>This work was partially done when the author was a postdoc associate at SMART center, MIT, Singapore.<br>
+            <sup>&#8224;</sup>This work was done when the author was a student intern at SMART center, MIT, Singapore.
         </div>
     </div>
 
